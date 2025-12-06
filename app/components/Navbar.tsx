@@ -11,7 +11,7 @@ export default function Navbar() {
     <header className="w-full bg-white relative z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          
+
           {/* --- LEFT: Logo --- */}
           <div className="flex-shrink-0 flex items-center">
             <Link href="/" className="flex items-center">
@@ -31,9 +31,14 @@ export default function Navbar() {
 
           {/* --- RIGHT: Desktop Action Button (Hidden on Mobile) --- */}
           <div className="hidden md:flex items-center">
-            <button className="bg-purple-950 text-white px-4 py-2 rounded-md hover:bg-purple-800 transition">
-              Join Waitlist
-            </button>
+            <a
+              href="https://docs.google.com/forms/d/e/1FAIpQLSftpGWQpKe5rfDc06GMOwbAvWED6lCp4UGWaTJouUHYU5EYIw/viewform"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <button className="bg-purple-950 text-white px-4 py-2 rounded-md hover:bg-purple-800 transition">
+                Join Waitlist
+              </button></a>
           </div>
 
           {/* --- MOBILE: Hamburger Button (Visible on Mobile) --- */}
@@ -73,12 +78,18 @@ export default function Navbar() {
             <Link href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-900 hover:bg-gray-50">Goal</Link>
             <Link href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-900 hover:bg-gray-50">Features</Link>
             <Link href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-900 hover:bg-gray-50">Contact</Link>
-            
+
             {/* Mobile Action Button */}
             <div className="mt-4 px-3">
+              <a
+                href="https://docs.google.com/forms/d/e/1FAIpQLSftpGWQpKe5rfDc06GMOwbAvWED6lCp4UGWaTJouUHYU5EYIw/viewform"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <button className="w-full bg-purple-950 text-white px-4 py-2 rounded-md hover:bg-purple-800 transition">
-                    Join Waitlist
+                  Join Waitlist
                 </button>
+              </a>
             </div>
           </div>
         </div>
