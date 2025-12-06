@@ -23,7 +23,6 @@ FROM deps AS build
 COPY . .
 ENV NODE_ENV=production
 RUN yarn build
-RUN yarn prune --omit=dev
 
 # Final runtime image
 FROM base AS runner
