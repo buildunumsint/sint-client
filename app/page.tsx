@@ -11,11 +11,11 @@ export default function Home() {
     <div>
       <Navbar />
       <main>
-        <Hero />
-        <About />
-        <Features/>
-        <CTA/>
-        <Footer/>
+        <section id="home"><Hero /></section>
+        <section id="about"><About /></section>
+        <section id="features"><Features/></section>
+        <section id="goal"><CTA/></section>
+        <section id="contact"><Footer/></section>
       </main>
     </div>
   );

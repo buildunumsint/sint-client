@@ -22,11 +22,11 @@ export default function Navbar() {
 
           {/* --- CENTER: Desktop Nav (Hidden on Mobile) --- */}
           <nav className="hidden md:flex space-x-8">
-            <Link href="#" className="text-gray-700 hover:text-purple-900 transition">Home</Link>
-            <Link href="#" className="text-gray-700 hover:text-purple-900 transition">About</Link>
-            <Link href="#" className="text-gray-700 hover:text-purple-900 transition">Goal</Link>
-            <Link href="#" className="text-gray-700 hover:text-purple-900 transition">Features</Link>
-            <Link href="#" className="text-gray-700 hover:text-purple-900 transition">Contact</Link>
+            <a href="#home" className="text-gray-700 hover:text-purple-900 transition">Home</a>
+            <a href="#about" className="text-gray-700 hover:text-purple-900 transition">About</a>
+            <a href="#goal" className="text-gray-700 hover:text-purple-900 transition">Goal</a>
+            <a href="#features" className="text-gray-700 hover:text-purple-900 transition">Features</a>
+            <a href="#contact" className="text-gray-700 hover:text-purple-900 transition">Contact</a>
           </nav>
 
           {/* --- RIGHT: Desktop Action Button (Hidden on Mobile) --- */}
@@ -73,11 +73,11 @@ export default function Navbar() {
       {isMenuOpen && (
         <div className="md:hidden bg-white border-t border-gray-100" id="mobile-menu">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col">
-            <Link href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-900 hover:bg-gray-50">Home</Link>
-            <Link href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-900 hover:bg-gray-50">About</Link>
-            <Link href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-900 hover:bg-gray-50">Goal</Link>
-            <Link href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-900 hover:bg-gray-50">Features</Link>
-            <Link href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-900 hover:bg-gray-50">Contact</Link>
+            <a href="#home" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-900 hover:bg-gray-50">Home</a>
+            <a href="#about" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-900 hover:bg-gray-50">About</a>
+            <a href="#goal" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-900 hover:bg-gray-50">Goal</a>
+            <a href="#features" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-900 hover:bg-gray-50">Features</a>
+            <a href="#contact" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-900 hover:bg-gray-50">Contact</a>
 
             {/* Mobile Action Button */}
             <div className="mt-4 px-3">
