@@ -7,7 +7,6 @@ FROM node:${NODE_VERSION}-bookworm-slim AS base
 LABEL fly_launch_runtime="Next.js"
 
 WORKDIR /app
-ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # Install and cache dependencies (dev deps required for build)
@@ -16,21 +15,25 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3 ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 COPY package.json yarn.lock ./
+
 RUN yarn install --frozen-lockfile
 
 # Build application
 FROM deps AS build
 COPY . .
+ENV NODE_ENV=production
 RUN yarn build
 RUN yarn prune --omit=dev
 
 # Final runtime image
 FROM base AS runner
 WORKDIR /app
+ENV NODE_ENV=production
 COPY --from=build /app/public ./public
 COPY --from=build /app/.next ./.next
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/package.json ./package.json
+COPY --from=build /app/next.config.ts ./next.config.ts
 
 EXPOSE 3000
 CMD [ "yarn", "start" ]
