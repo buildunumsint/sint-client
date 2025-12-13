@@ -24,8 +24,8 @@ export default function Navbar() {
           <nav className="hidden md:flex space-x-8">
             <a href="#home" className="text-gray-700 hover:text-purple-900 transition">Home</a>
             <a href="#about" className="text-gray-700 hover:text-purple-900 transition">About</a>
-            <a href="#goal" className="text-gray-700 hover:text-purple-900 transition">Goal</a>
             <a href="#features" className="text-gray-700 hover:text-purple-900 transition">Features</a>
+            <a href="#goal" className="text-gray-700 hover:text-purple-900 transition">Goal</a>
             <a href="#contact" className="text-gray-700 hover:text-purple-900 transition">Contact</a>
           </nav>
 
@@ -75,8 +75,8 @@ export default function Navbar() {
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col">
             <a href="#home" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-900 hover:bg-gray-50">Home</a>
             <a href="#about" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-900 hover:bg-gray-50">About</a>
-            <a href="#goal" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-900 hover:bg-gray-50">Goal</a>
             <a href="#features" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-900 hover:bg-gray-50">Features</a>
+            <a href="#goal" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-900 hover:bg-gray-50">Goal</a>
             <a href="#contact" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-900 hover:bg-gray-50">Contact</a>
 
             {/* Mobile Action Button */}

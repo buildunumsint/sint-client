@@ -41,9 +41,15 @@ export default function CTA() {
 
         {/* CTA Button */}
         <div className="pt-6">
-          <button className="bg-white text-[#2e0249] px-10 py-4 rounded-lg font-bold shadow-[0_4px_14px_0_rgba(255,255,255,0.39)] hover:shadow-[0_6px_20px_rgba(255,255,255,0.23)] hover:scale-105 transition-all duration-300">
-            Join waitlist now
-          </button>
+          <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLSftpGWQpKe5rfDc06GMOwbAvWED6lCp4UGWaTJouUHYU5EYIw/viewform"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <button className="bg-white text-[#2e0249] px-10 py-4 rounded-lg font-bold shadow-[0_4px_14px_0_rgba(255,255,255,0.39)] hover:shadow-[0_6px_20px_rgba(255,255,255,0.23)] hover:scale-105 transition-all duration-300">
+              Join waitlist now
+            </button>
+          </a>
         </div>
 
       </div>
