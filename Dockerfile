@@ -9,6 +9,7 @@ LABEL fly_launch_runtime="Next.js"
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
 
+
 # Install and cache dependencies (dev deps required for build)
 FROM base AS deps
 RUN apt-get update -qq && \
