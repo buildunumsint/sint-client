@@ -10,10 +10,6 @@ const CreateSacramentDialog = () => {
     const { createSacrament } = useArchiveDialogs();
     return (
         <Dialog open={createSacrament.isOpen} onOpenChange={createSacrament.onOpenChange}>
-            <DialogTrigger>
-               
-                    Create Sacrament
-            </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>
