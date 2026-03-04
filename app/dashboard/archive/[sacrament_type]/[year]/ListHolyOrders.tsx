@@ -8,28 +8,28 @@ import { useMemo } from "react";
 import { useArchiveDialogs } from "../../_shared/context/ArchiveDialogsContext";
 import TitleHeader from "../../_shared/TitleHeader";
 import AddRecordButton from "../../_shared/ buttons/AddRecordButton";
-interface ListBaptismPageProps {
+
+interface ListHolyOrdersPageProps {
   year: string;
 }
 
-
-const ListBaptism = ({ year }: ListBaptismPageProps) => {
+const ListHolyOrders = ({ year }: ListHolyOrdersPageProps) => {
   const { access_token, updateAccessToken } = useAuthContext();
   const { editSacrament } = useArchiveDialogs();
   const apiClient = createApiClientSecured(
     access_token,
     updateAccessToken,
-    "json",
+    "json"
   );
-  const { data, isFetching, refetch } = useQuery({
-    queryKey: ["sacraments", "baptism", year],
-    queryFn: () => apiClient.get(`/sacraments/baptisms?year=${year}`),
+  const { data, isFetching } = useQuery({
+    queryKey: ["sacraments", "holy_orders", year],
+    queryFn: () => apiClient.get(`/sacraments/holy_orders?year=${year}`),
     enabled: !!access_token,
   });
 
-  const baptisms: Baptism[] = useMemo(() => {
+  const records: HolyOrders[] = useMemo(() => {
     if (!data?.status || !data?.data) return [];
-    return parseArray(data?.data?.baptisms) as Baptism[];
+    return parseArray(data?.data?.holy_orders) as HolyOrders[];
   }, [data]);
 
   const Field = ({
@@ -47,63 +47,54 @@ const ListBaptism = ({ year }: ListBaptismPageProps) => {
     </div>
   );
 
-  const seeMore = (baptism: Baptism) => {
-    editSacrament.onOpenChange(true, "baptism", baptism);
+  const seeMore = (record: HolyOrders) => {
+    editSacrament.onOpenChange(true, "holy_orders", record);
   };
 
   return (
     <div className="space-y-10">
-      <TitleHeader title={`Baptism - ${year}`}>
+      <TitleHeader title={`Holy Orders - ${year}`}>
         <div className="flex w-full gap-10">
           <div className="rounded-lg bg-[#f6f6f6ae] p-5 flex h-full w-full flex-1 ring-1 ring-zinc-200/70"></div>
-          <AddRecordButton sacramentType="baptism" />
+          <AddRecordButton sacramentType="holy_orders" />
         </div>
       </TitleHeader>
       <div className="flex flex-col gap-4 w-full">
         {isFetching ? (
           <div className="rounded-2xl bg-white px-4 py-4 sm:px-6 shadow-sm ring-1 ring-zinc-200">
-            <p className="text-sm text-zinc-600">Loading baptisms…</p>
+            <p className="text-sm text-zinc-600">Loading records…</p>
           </div>
         ) : null}
-        {!isFetching && baptisms.length === 0 ? (
+        {!isFetching && records.length === 0 ? (
           <div className="rounded-2xl bg-white px-4 py-4 sm:px-6 shadow-sm ring-1 ring-zinc-200">
             <p className="text-sm text-zinc-600">
-              No baptism records found for {year}.
+              No holy orders records found for {year}.
             </p>
           </div>
         ) : null}
-        {baptisms.map((baptism) => (
+        {records.map((record) => (
           <div
-            key={baptism.baptism_id}
+            key={record.holy_orders_id}
             className="w-full rounded-2xl bg-[#F7F7F7] px-4 py-4 sm:px-6 shadow-xs"
           >
             <div className="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-3 lg:grid-cols-6">
               <Field
                 label="Full name"
                 value={
-                  `${baptism?.recipient_first_name ?? ""} ${baptism?.recipient_last_name ?? ""}`.trim() ||
+                  `${record?.recipient_first_name ?? ""} ${record?.recipient_last_name ?? ""}`.trim() ||
                   "------"
                 }
               />
-              <Field label="Baptismal name" value={baptism?.baptismal_name} />
+              <Field label="Ordination level" value={record?.ordination_level} />
               <Field
-                label="Date baptized"
-                value={dateStrokesFull(baptism?.date_baptized)}
+                label="Ordination date"
+                value={dateStrokesFull(record?.ordination_date)}
               />
-              <Field label="Minister" value={baptism?.officiating_priest} />
-              <Field
-                label="Sponsor"
-                value={
-                  [baptism?.god_parent]
-                    .filter(Boolean)
-                    .join(" & ") || "------"
-                }
-              />
-
+              <Field label="Ordaining bishop" value={record?.ordaining_bishop} />
               <div className="col-span-2 flex items-center justify-end sm:col-span-3 lg:col-span-1">
                 <button
                   type="button"
-                  onClick={() => seeMore(baptism)}
+                  onClick={() => seeMore(record)}
                   className="text-sm font-semibold text-violet-600 hover:text-violet-700"
                 >
                   See more
@@ -117,4 +108,4 @@ const ListBaptism = ({ year }: ListBaptismPageProps) => {
   );
 };
 
-export default ListBaptism;
+export default ListHolyOrders;

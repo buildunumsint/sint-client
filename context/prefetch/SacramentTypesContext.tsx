@@ -4,31 +4,48 @@ import { createApiClientSecured } from "@/services/apiClient";
 import { useQuery } from "@tanstack/react-query";
 import { parseArray } from "@/lib/formatters";
 
-export type SacramentsTypeContextType = {
-  sacrament_types: SacramentsType[];
+export type SacramentTypesContextType = {
+  sacramentTypes: SacramentsType[];
 }
 
-const SacramentsTypeContext = createContext<SacramentsTypeContextType | undefined>(undefined);
+const SacramentTypesContext = createContext<SacramentTypesContextType | undefined>(undefined);
 
-export const useSacramentsTypeContext = (): SacramentsTypeContextType => {
-  const ctx = useContext(SacramentsTypeContext);
+export const useSacramentTypesContext = (): SacramentTypesContextType => {
+  const ctx = useContext(SacramentTypesContext);
   if (!ctx) {
-    throw new Error("useSacramentsTypeContext must be used within SacramentsTypeContextProvider");
+    throw new Error("useSacramentTypesContext must be used within SacramentTypesContextProvider");
   }
   return ctx;
 };
 
-const INIT_VALUES: SacramentsTypeContextType = {
-  sacrament_types: [],
+const INIT_VALUES: SacramentTypesContextType = {
+  sacramentTypes: [],
 };
 
 
-interface SacramentsTypeContextProviderProps {
+interface SacramentTypesContextProviderProps {
   children: React.ReactNode;
 }
 
-export const SacramentsTypeContextProvider = ({ children }: SacramentsTypeContextProviderProps) => {
-  const [sacramentsTypes, setSacramentsTypes] = useState<SacramentsType[]>([]);
+export const sacramentNameFromType = (type: SacramentType | string) => {
+  switch (type) {
+    case "baptism":
+      return "Baptism";
+    case "confirmation":
+      return "Confirmation";
+    case "holy_eucharist":
+      return "Eucharist";
+    case "holy_orders":
+    case "holy_order":
+      return "Holy Orders";
+    case "matrimony":
+      return "Matrimony";
+    default:
+      return String(type);
+  }
+}
+export const SacramentTypesContextProvider = ({ children }: SacramentTypesContextProviderProps) => {
+  const [sacramentsTypes, setSacramentsTypes] = useState<SacramentsType[]>(INIT_VALUES.sacramentTypes);
   const { access_token, updateAccessToken } = useAuthContext();
 
   const apiClient = createApiClientSecured(access_token, updateAccessToken);
@@ -44,5 +61,5 @@ export const SacramentsTypeContextProvider = ({ children }: SacramentsTypeContex
     }
   }, [data, isFetching]);
 
-  return <SacramentsTypeContext.Provider value={{ sacrament_types: sacramentsTypes }}>{children}</SacramentsTypeContext.Provider>;
+  return <SacramentTypesContext.Provider value={{ sacramentTypes: sacramentsTypes }}>{children}</SacramentTypesContext.Provider>;
 };

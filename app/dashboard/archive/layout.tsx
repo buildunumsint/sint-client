@@ -1,5 +1,6 @@
 import { ArchiveDialogsProvider } from "./_shared/context/ArchiveDialogsContext";
-import CreateSacramentDialog from "./_shared/dialogs/CreateSacramentDialog";
+import CreateSacramentDialog from "./_shared/dialogs/sacraments";
+import EditSacramentDialog from "./_shared/dialogs/sacraments/edit";
 
 interface LayoutProps {
     children: React.ReactNode;
@@ -9,6 +10,7 @@ const Layout = ({ children }: LayoutProps) => {
         <ArchiveDialogsProvider>
             {children}
             <CreateSacramentDialog />
+            <EditSacramentDialog />
         </ArchiveDialogsProvider>
      );
 }

@@ -1,6 +1,9 @@
-const FolderIcon = () => {
+interface FolderIconProps {
+    className?: string;
+}
+const FolderIcon = ({ className }: FolderIconProps) => {
     return (
-        <svg width="188" height="138" viewBox="0 0 188 138" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg className={`w-20 h-20 sm:w-full sm:h-full ${className} `} width="188" height="138" viewBox="0 0 188 138" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="15.6461" width="156.303" height="119.721" rx="13.3024" fill="#8F8F8F" />
             <rect x="23.6301" y="11.6562" width="141" height="98" rx="3.32559" fill="white" />
             <g filter="url(#filter0_d_81_671)">

@@ -184,11 +184,21 @@ export function createApiClientSecured(
         const response = await axiosInstance.delete(
           sensitive ? `/api/sensitive${url}` : url,
         );
-        return successResponse(
-          response.data.message,
-          response.data.data,
-          response.data.other,
-        );
+        if (response.data?.success === true) {
+          const other = {
+            pagination: response?.data?.paginationInfo,
+          };
+          return successResponse(
+            response?.data?.message,
+            response?.data?.data,
+            other,
+          );
+        } else {
+          return errorResponse(
+            response?.data?.message || "Some error occured",
+            response?.data,
+          );
+        }
       } catch (error) {
         return catchError(error);
       }
@@ -200,11 +210,21 @@ export function createApiClientSecured(
           sensitive ? `/api/sensitive${url}` : url,
           data,
         );
-        return successResponse(
-          response.data.message,
-          response.data.data,
-          response.data.other,
-        );
+        if (response.data?.success === true) {
+          const other = {
+            pagination: response?.data?.paginationInfo,
+          };
+          return successResponse(
+            response?.data?.message,
+            response?.data?.data,
+            other,
+          );
+        } else {
+          return errorResponse(
+            response?.data?.message || "Some error occured",
+            response?.data,
+          );
+        }
       } catch (error) {
         return catchError(error);
       }

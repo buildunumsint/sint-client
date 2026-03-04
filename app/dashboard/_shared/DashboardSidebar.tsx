@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { X } from "lucide-react";
 import SidebarNav from "./SidebarNav";
 import { DASHBOARD_BOTTOM_NAV, DASHBOARD_NAV } from "../nav";
@@ -13,6 +14,9 @@ export default function DashboardSidebar({
   mobile?: boolean;
   onClose?: () => void;
 }) {
+  const pathname = usePathname();
+  const section = pathname.split("/")[2] ?? "";
+
   return (
     <aside
       className={[
@@ -51,7 +55,11 @@ export default function DashboardSidebar({
         )}
       </div>
 
-      <SidebarNav items={DASHBOARD_NAV} onNavigate={mobile ? onClose : undefined} />
+      <SidebarNav
+        key={`main-${section}`}
+        items={DASHBOARD_NAV}
+        onNavigate={mobile ? onClose : undefined}
+      />
 
       <div className="mt-8 border-t border-zinc-200/70 pt-4">
         <SidebarNav
@@ -61,7 +69,7 @@ export default function DashboardSidebar({
       </div>
 
       <div className="mt-auto pt-6">
-        <div className="rounded-2xl border border-zinc-200/70 bg-gradient-to-br from-violet-50 to-white p-4">
+        <div className="rounded-2xl border border-zinc-200/70 bg-linear-to-br from-violet-50 to-white p-4">
           <p className="text-sm font-semibold text-zinc-900">Need help?</p>
           <p className="mt-1 text-xs text-zinc-600">
             Visit the Help Center for quick answers.

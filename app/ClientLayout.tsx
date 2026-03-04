@@ -7,7 +7,9 @@ import {
 } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Toaster } from 'sonner';
-import { SacramentsTypeContextProvider } from '@/context/prefetch/SacramentTypesContext';
+import { SacramentTypesContextProvider } from '@/context/prefetch/SacramentTypesContext';
+import { StatsContextProvider } from '@/context/prefetch/StatsContext';
+import { ParishesContextProvider } from '@/context/prefetch/ParishesContext';
 
 const queryClient = new QueryClient()
 
@@ -16,13 +18,18 @@ const ClientLayout = ({ children }: { children: React.ReactNode }) => {
     <QueryClientProvider client={queryClient}>
       <Toaster position="top-center" />
       <AuthContextProvider>
-        <SacramentsTypeContextProvider>
-          {children}
-        </SacramentsTypeContextProvider>
+        <StatsContextProvider>
+          <SacramentTypesContextProvider>
+            <ParishesContextProvider>
+              {children}
+            </ParishesContextProvider>
+          </SacramentTypesContextProvider>
+        </StatsContextProvider>
+
       </AuthContextProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
-  )
-}
+  );
+};
 
-export default ClientLayout
+export default ClientLayout;

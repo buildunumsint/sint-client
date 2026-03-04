@@ -8,28 +8,28 @@ import { useMemo } from "react";
 import { useArchiveDialogs } from "../../_shared/context/ArchiveDialogsContext";
 import TitleHeader from "../../_shared/TitleHeader";
 import AddRecordButton from "../../_shared/ buttons/AddRecordButton";
-interface ListBaptismPageProps {
+
+interface ListConfirmationPageProps {
   year: string;
 }
 
-
-const ListBaptism = ({ year }: ListBaptismPageProps) => {
+const ListConfirmation = ({ year }: ListConfirmationPageProps) => {
   const { access_token, updateAccessToken } = useAuthContext();
   const { editSacrament } = useArchiveDialogs();
   const apiClient = createApiClientSecured(
     access_token,
     updateAccessToken,
-    "json",
+    "json"
   );
   const { data, isFetching, refetch } = useQuery({
-    queryKey: ["sacraments", "baptism", year],
-    queryFn: () => apiClient.get(`/sacraments/baptisms?year=${year}`),
+    queryKey: ["sacraments", "confirmation", year],
+    queryFn: () => apiClient.get(`/sacraments/confirmations?year=${year}`),
     enabled: !!access_token,
   });
 
-  const baptisms: Baptism[] = useMemo(() => {
+  const confirmations: Confirmation[] = useMemo(() => {
     if (!data?.status || !data?.data) return [];
-    return parseArray(data?.data?.baptisms) as Baptism[];
+    return parseArray(data?.data?.confirmations) as Confirmation[];
   }, [data]);
 
   const Field = ({
@@ -47,63 +47,55 @@ const ListBaptism = ({ year }: ListBaptismPageProps) => {
     </div>
   );
 
-  const seeMore = (baptism: Baptism) => {
-    editSacrament.onOpenChange(true, "baptism", baptism);
+  const seeMore = (record: Confirmation) => {
+    editSacrament.onOpenChange(true, "confirmation", record);
   };
 
   return (
     <div className="space-y-10">
-      <TitleHeader title={`Baptism - ${year}`}>
+      <TitleHeader title={`Confirmation - ${year}`}>
         <div className="flex w-full gap-10">
           <div className="rounded-lg bg-[#f6f6f6ae] p-5 flex h-full w-full flex-1 ring-1 ring-zinc-200/70"></div>
-          <AddRecordButton sacramentType="baptism" />
+          <AddRecordButton sacramentType="confirmation" />
         </div>
       </TitleHeader>
       <div className="flex flex-col gap-4 w-full">
         {isFetching ? (
           <div className="rounded-2xl bg-white px-4 py-4 sm:px-6 shadow-sm ring-1 ring-zinc-200">
-            <p className="text-sm text-zinc-600">Loading baptisms…</p>
+            <p className="text-sm text-zinc-600">Loading confirmations…</p>
           </div>
         ) : null}
-        {!isFetching && baptisms.length === 0 ? (
+        {!isFetching && confirmations.length === 0 ? (
           <div className="rounded-2xl bg-white px-4 py-4 sm:px-6 shadow-sm ring-1 ring-zinc-200">
             <p className="text-sm text-zinc-600">
-              No baptism records found for {year}.
+              No confirmation records found for {year}.
             </p>
           </div>
         ) : null}
-        {baptisms.map((baptism) => (
+        {confirmations.map((record) => (
           <div
-            key={baptism.baptism_id}
+            key={record.confirmation_id}
             className="w-full rounded-2xl bg-[#F7F7F7] px-4 py-4 sm:px-6 shadow-xs"
           >
             <div className="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-3 lg:grid-cols-6">
               <Field
                 label="Full name"
                 value={
-                  `${baptism?.recipient_first_name ?? ""} ${baptism?.recipient_last_name ?? ""}`.trim() ||
+                  `${record?.recipient_first_name ?? ""} ${record?.recipient_last_name ?? ""}`.trim() ||
                   "------"
                 }
               />
-              <Field label="Baptismal name" value={baptism?.baptismal_name} />
+              <Field label="Confirmation name" value={record?.confirmation_name} />
               <Field
-                label="Date baptized"
-                value={dateStrokesFull(baptism?.date_baptized)}
+                label="Date confirmed"
+                value={dateStrokesFull(record?.date_confirmed)}
               />
-              <Field label="Minister" value={baptism?.officiating_priest} />
-              <Field
-                label="Sponsor"
-                value={
-                  [baptism?.god_parent]
-                    .filter(Boolean)
-                    .join(" & ") || "------"
-                }
-              />
-
+              <Field label="Officiating bishop" value={record?.officiating_bishop} />
+              <Field label="Sponsor" value={record?.sponsor} />
               <div className="col-span-2 flex items-center justify-end sm:col-span-3 lg:col-span-1">
                 <button
                   type="button"
-                  onClick={() => seeMore(baptism)}
+                  onClick={() => seeMore(record)}
                   className="text-sm font-semibold text-violet-600 hover:text-violet-700"
                 >
                   See more
@@ -117,4 +109,4 @@ const ListBaptism = ({ year }: ListBaptismPageProps) => {
   );
 };
 
-export default ListBaptism;
+export default ListConfirmation;

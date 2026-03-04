@@ -6,14 +6,206 @@ html {
 
 :root {
   --background: #ffffff;
+  --primary-foreground: #ffffff;
   --foreground: #171717;
+  --primary: #7834bb;
+  --sint-error: #ad1117;
+  --sint-success: #e3ff02;
 }
 
 @theme inline {
+  --primary: var(--primary);
+  --color-foreground: var(--primary-foreground);
+  --color-primary-foreground: var(--primary-foreground);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-input-blur: hsl(var(--input) / 0.35);
+  --color-ring: hsl(var(--ring));
+  --color-error: var(--sint-error);
+  --color-success: var(--sint-success);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --popover-background: var(--background);
+}
+
+@layer base {
+  :root {
+    --animation-smooth: 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+    --animate-color: 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+    --animation-primary: 0.5s cubic-bezier(0.3, 1, 0.3, 1);
+
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 10% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+    --dash-content-left-pad: 0px;
+    /* --primary-app-color: #6dfff6; */
+    --background-default: #000000;
+    --sint-primary: #ff0051;
+    --sint-error: #ad1117;
+    --sint-success: #e3ff02;
+    /* --sint-success: #07e17b; */
+
+    /* --sint-success: #6ede73; */
+    --sint-orange: #ff6302;
+    --sint-orange-2: #ff7300;
+    --sint-border: #0000000d;
+    --sint-cursor: var(--sint-border);
+    --app-primary-color-1: #11161a;
+
+    --background-default: #000000;
+    --app-opacity-5: #0000000d;
+    --app-opacity-3: #00000008;
+    --app-opacity-10: #0000001a;
+    --app-opacity-20: #00000033;
+    --app-opacity-30: #0000004d;
+    --app-opacity-40: #00000066;
+    --app-opacity-50: #00000080;
+    /* --app-opacity-70: #000000b3; */
+
+    --gradient-primary: linear-gradient(84.7deg, #ff0051 0%, #ff7300 100%);
+
+    --gray-background-1: #27292b;
+    --gray-background-2: #292d31;
+    --gray-background-3: #1a1a1a;
+    --gray-background-4: #e7e7e7;
+    --gray-background-5: #e9e9e9;
+    --gray-text-1: #b8b9ba;
+    --gray-text-2: #a4a4a4;
+    --gray-text-3: #656565;
+
+    --gray-65: #595959;
+
+    --glass: #ffffff1a;
+
+    --blue-background-1: #11161a;
+
+    --image-background: rgba(0, 0, 0, 0.05);
+
+    --text-default: #ffffff;
+    --text-color-1: #efefef;
+    --text-color-blur: #efefef96;
+    --text-color-2: #f3f3f3;
+    --text-color-3: #acadaf;
+    --text-sidebar-hover: var(--sint-primary);
+
+    --card-background: #1c1e21;
+
+    --screen-max: 1400px;
+
+    --dash-pad: 40px;
+
+    --text-label: #b8b9ba;
+
+    /* plusicon */
+    --solid-plus-bg: #b8b9ba;
+    --solid-plus: #f4f4f6;
+
+    --popover: #ffffff;
+
+    --divider: #b3b3b380;
+  }
+
+  :root[data-theme="DARK"] {
+    --app-background-color: #1c1e21;
+    --app-primary-color-1: #11161a;
+    --app-primary-color-2: #27292b;
+    --app-primary-color-3: #1c1d1e;
+    --app-opacity-5: #ffffff0d;
+    --app-opacity-3: #ffffff08;
+    --app-opacity-10: #ffffff1a;
+    --app-opacity-20: #ffffff33;
+    --app-opacity-30: #ffffff4d;
+    --app-opacity-40: #ffffff66;
+    --app-opacity-50: #ffffff80;
+    --app-opacity-70: #ffffffb3;
+    --app-opacity-60: #00000060;
+    --app-opacity-90: #000000e5;
+
+    --background-default: #000000;
+    --background-default-blur: #ffffff14;
+
+    --gray-background-4: #2a2a2a;
+    --gray-background-5: #2a2a2a;
+
+    --text-default: #ffffff;
+
+    --input: var(--app-background-color);
+    --input-border: #ffffff;
+    --input-border-2: #ffffff1a;
+    --input-border-blur: #ffffff36;
+
+    --popover: var(--app-background-color);
+
+    --sint-cursor: var(--popover);
+    --sint-border: #ffffff0d;
+  }
+
+  :root[data-theme="LIGHT"] {
+    --app-background-color: #f5f5f5;
+    --app-primary-color-1: #ffffff;
+    --app-primary-color-2: #f3f3f3;
+    --app-primary-color-3: #f7f7f7;
+    --app-opacity-60: #ffffff99;
+    --app-opacity-90: #ffffffe5;
+
+    --background-default: #ffffff;
+    --background-default-blur: #00000014;
+    --sint-border: #0000001a;
+
+    --blue-background-1: #ffffff;
+
+    --card-background: #ffffff;
+
+    --gray-background-1: #11161a0d;
+    --gray-background-2: #11161a0d;
+    --gray-background-3: #f4f2f2;
+
+    --input: #0000001a;
+    --input-border: #0000001a;
+    --input-border-blur: #0000000b;
+
+    --image-background: rgba(0, 0, 0, 0.025);
+
+    --divider: var(--input-border);
+
+    --text-default: #000000;
+    --text-color-2: #000000;
+    --text-color-1: #00000080;
+    --text-color-blur: #00000087;
+    --text-color-3: rgba(0, 0, 0, 0.3);
+    --text-sidebar-hover: var(--text-default);
+
+    --text-label: #00000090;
+
+    /* plusicon */
+    --solid-plus-bg: #ffffff;
+    --solid-plus: var(--sint-primary);
+  }
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -23,11 +215,20 @@ html {
   }
 } */
 
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system,
-    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
-    "Apple Color Emoji", "Segoe UI Emoji";
+  font-family:
+    var(--font-sans),
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    "Noto Sans",
+    "Apple Color Emoji",
+    "Segoe UI Emoji";
 }

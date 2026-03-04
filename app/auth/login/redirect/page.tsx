@@ -1,4 +1,3 @@
-"use client";
 
 import { connection } from "next/server";
 import Redirect from "./Redirect";

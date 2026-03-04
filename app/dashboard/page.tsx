@@ -1,3 +1,6 @@
+"use client";
+import { useAuthContext } from "@/context/AuthContext";
+import { useStatsContext } from "@/context/prefetch/StatsContext";
 import { CalendarDays, Filter, TrendingDown, TrendingUp } from "lucide-react";
 import Image from "next/image";
 
@@ -68,6 +71,8 @@ function SectionCard({
 }
 
 export default function DashboardPage() {
+  const { stats } = useStatsContext();
+  const { user } = useAuthContext();
   return (
     <div className="space-y-6">
       <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-violet-600 to-violet-800 p-7 text-white shadow-sm">
@@ -78,7 +83,7 @@ export default function DashboardPage() {
         <div className="relative">
           <p className="text-sm/6 text-white/80">Dashboard</p>
           <h1 className="mt-2 text-2xl font-semibold tracking-tight">
-            Hello, Christopher
+            Hello, {user?.first_name} {user?.last_name}
           </h1>
           <p className="mt-1 text-sm text-white/80">
             It’s a blessing to have you with us today.
@@ -111,24 +116,29 @@ export default function DashboardPage() {
 
         <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <StatCard
-            title="Active Members"
-            value="4,560"
+            title="Total Users"
+            value={stats?.total_users?.toString() || "0"}
             deltaLabel="+12%"
             deltaPositive
           />
           <StatCard
-            title="Registered Members"
-            value="4,850"
+            title="Total Parishioners"
+            value={stats?.total_parishioners?.toString() || "0"}
             deltaLabel="+3%"
             deltaPositive
           />
           <StatCard
-            title="Total Parishes"
-            value="30"
+            title="Total Priests"
+            value={stats?.total_priests?.toString() || "0"}
             deltaLabel="+12%"
             deltaPositive
           />
-          <StatCard title="Active Parish Groups" value="29" deltaLabel="-1%" />
+          <StatCard
+            title="Total Parish Admins"
+            value={stats?.total_parish_admins?.toString() || "0"}
+            deltaLabel="+12%"
+            deltaPositive
+          />
         </div>
       </div>
 
@@ -167,7 +177,7 @@ export default function DashboardPage() {
         </SectionCard>
 
         <SectionCard
-          title="Recent Client"
+          title="Recent"
           right={
             <button
               type="button"
@@ -177,7 +187,7 @@ export default function DashboardPage() {
             </button>
           }
         >
-          <div className="space-y-3">
+          {/* <div className="space-y-3">
             {[
               { name: "Julia Cooper", role: "Supervisor", date: "05.04.25" },
               { name: "John Kelly", role: "Manager", date: "05.04.25" },
@@ -209,6 +219,16 @@ export default function DashboardPage() {
                 <p className="text-xs font-semibold text-zinc-500">{u.date}</p>
               </div>
             ))}
+          </div> */}
+            <div className="grid h-[320px] place-items-center rounded-2xl bg-zinc-50 ring-1 ring-zinc-200/70">
+            <div className="text-center">
+              <p className="text-sm font-semibold text-zinc-900">
+                Recent Records
+              </p>
+              <p className="mt-1 text-xs text-zinc-500">
+                Recent records will be displayed here.
+              </p>
+            </div>
           </div>
         </SectionCard>
       </div>

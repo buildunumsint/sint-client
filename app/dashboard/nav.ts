@@ -19,9 +19,9 @@ export const DASHBOARD_NAV: DashboardNavItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { label: "Archive", href: "/dashboard/archive", icon: Archive },
   { label: "Chatbot", href: "/dashboard/chatbot", icon: Bot },
-  { label: "Meme School", href: "/dashboard/meme-school", icon: Boxes },
-  { label: "Community", href: "/dashboard/community", icon: Users },
-  { label: "Games", href: "/dashboard/games", icon: Gamepad2 },
+  // { label: "Meme School", href: "/dashboard/meme-school", icon: Boxes },
+  // { label: "Community", href: "/dashboard/community", icon: Users },
+  // { label: "Games", href: "/dashboard/games", icon: Gamepad2 },
 ];
 
 export const DASHBOARD_BOTTOM_NAV: DashboardNavItem[] = [
