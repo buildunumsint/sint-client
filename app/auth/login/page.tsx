@@ -183,7 +183,7 @@ export default function LoginPage() {
               {loginMut.isPending ? "Signing in…" : "Sign in"}
             </button>
           </form>
-
+{/* 
           <div className="my-6 flex items-center gap-3">
             <div className="h-px flex-1 bg-foreground/10" />
             <span className="text-xs text-foreground/60">or</span>
@@ -201,7 +201,7 @@ export default function LoginPage() {
             className="w-full rounded-xl border border-foreground/15 bg-background px-4 py-3 text-sm font-medium transition hover:bg-foreground/5"
           >
             Continue with Google
-          </button>
+          </button> */}
 
           <p className="mt-6 text-center text-xs text-foreground/60">
             By continuing, you agree to our terms and privacy policy.
