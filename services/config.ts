@@ -1,7 +1,7 @@
 "use client";
 
 import { dynamicPaths } from "@/lib/constants/paths";
-import { API_BASE_PATH } from "@/lib/constants";
+import { API_BASE_PATH, baseUrl } from "@/lib/constants";
 
 import axios, { AxiosInstance } from "axios";
 import { useRouter } from "next/navigation";
@@ -52,7 +52,7 @@ export const createAxiosSecuredInstance = (
     router.push(dynamicPaths(null).auth.login());
   };
   const instance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+    baseURL: baseUrl,
     headers: {
       "Content-Type": `${
         type === "json" ? "application/json" : "multipart/form-data"
@@ -66,7 +66,7 @@ export const createAxiosSecuredInstance = (
     if (config.url?.startsWith(SENSITIVE_BASE_PATH)) {
       config.baseURL = "";
     } else {
-      config.baseURL = process.env.NEXT_PUBLIC_API_BASE_URL + API_BASE_PATH;
+      config.baseURL = baseUrl + API_BASE_PATH;
     }
     return config;
   });
@@ -80,7 +80,7 @@ export const createAxiosUnsecuredInstance = (
   type: ContentType,
 ): AxiosInstance => {
   const instance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL + API_BASE_PATH,
+    baseURL: baseUrl + API_BASE_PATH,
     headers: {
       "Content-Type": `${
         type === "json" ? "application/json" : "multipart/form-data"

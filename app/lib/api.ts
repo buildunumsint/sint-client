@@ -1,4 +1,5 @@
 import axios, { type AxiosError, type AxiosInstance } from "axios";
+import { baseUrl } from "@/lib/constants";
 
 export type ApiErrorShape = {
   message?: string;
@@ -19,7 +20,7 @@ export class ApiError extends Error {
 }
 
 export const api: AxiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || undefined,
+  baseURL: baseUrl || undefined,
   timeout: 30_000,
   headers: {
     Accept: "application/json",

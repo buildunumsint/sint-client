@@ -20,6 +20,9 @@ COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 
 # Build application
+# Next.js on Fly.io: NEXT_PUBLIC_* must be available at build time to be embedded in the client bundle.
+# Build-time: set in fly.toml [build.args] or pass via fly deploy --build-arg.
+# Runtime-only: use fly secrets set KEY=VALUE (server-side / getServerSideProps / API routes).
 FROM deps AS build
 ARG NEXT_PUBLIC_API_BASE_URL
 ENV NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL
