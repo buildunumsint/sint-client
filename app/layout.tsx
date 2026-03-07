@@ -70,20 +70,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const runtimeEnv = {
-    NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL || "",
-  };
-
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `window.__NEXT_PUBLIC_ENV__=${JSON.stringify(runtimeEnv)}`,
-          }}
-        />
         <ClientLayout>
           {children}
         </ClientLayout>

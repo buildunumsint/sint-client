@@ -6,11 +6,11 @@
 app = 'sint-client-dev'
 primary_region = 'jnb'
 
-# Runtime: fly secrets set NEXT_PUBLIC_API_BASE_URL=https://your-api.fly.dev
-# Build-time (for client bundle): set below or fly deploy --build-arg NEXT_PUBLIC_API_BASE_URL=...
+# Env: set via fly secrets set NEXT_PUBLIC_API_BASE_URL=https://your-api.fly.dev
+# For client bundle, pass at build: fly deploy --build-arg NEXT_PUBLIC_API_BASE_URL=https://your-api.fly.dev
 [build]
   [build.args]
-    NEXT_PUBLIC_API_BASE_URL = ""
+    NEXT_PUBLIC_API_BASE_URL = "$NEXT_PUBLIC_API_BASE_URL"
 
 [http_service]
   internal_port = 3000
