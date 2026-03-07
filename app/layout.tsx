@@ -15,19 +15,12 @@ const geistMono = Geist_Mono({
 
 export const OG_IMAGE_DEFAULT = "https://unumsint.com/Diocese_Logo.png";
 
-const OG_SITE_NAME = "Unum Sint";
-const OG_TITLE = "One Platform. One Community. One Church.";
+const OG_SITE_NAME = "";
+const OG_TITLE = "";
 const OG_DESCRIPTION =
-  "A digital platform to connect Parishes, strengthen communication, and bring various forms of Church life into one unified digital space, rooted in faith.";
-const OG_URL = "https://unumsint.com/";
-const META_KEYWORDS = [
-  "catholic archive",
-  "parish platfrom",
-  "parish archive portharcout",
-  "catholic diocese portharcourt",
-  "unum sint",
-  "catholic church app",
-  "church community platform",
+  "";
+const OG_URL = "";
+const META_KEYWORDS = [   ""
 ];
 
 const OG_IMAGES_DEFAULT = [
