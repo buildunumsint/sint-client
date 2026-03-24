@@ -13,24 +13,6 @@ html {
   --sint-success: #e3ff02;
 }
 
-@theme inline {
-  --primary: var(--primary);
-  --color-foreground: var(--primary-foreground);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-primary: var(--primary);
-  --color-border: hsl(var(--border));
-  --color-input: hsl(var(--input));
-  --color-input-blur: hsl(var(--input) / 0.35);
-  --color-ring: hsl(var(--ring));
-  --color-error: var(--sint-error);
-  --color-success: var(--sint-success);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --popover-background: var(--background);
-}
-
 @layer base {
   :root {
     --animation-smooth: 0.5s cubic-bezier(0.7, 0, 0.3, 1);
@@ -67,12 +49,14 @@ html {
     --background-default: #000000;
     --sint-primary: #ff0051;
     --sint-error: #ad1117;
+    --sint-error-2: #B91C1C;
     --sint-success: #e3ff02;
     /* --sint-success: #07e17b; */
 
     /* --sint-success: #6ede73; */
     --sint-orange: #ff6302;
     --sint-orange-2: #ff7300;
+    --sint-green:#16A34A;
     --sint-border: #0000000d;
     --sint-cursor: var(--sint-border);
     --app-primary-color-1: #11161a;
@@ -97,8 +81,12 @@ html {
     --gray-text-1: #b8b9ba;
     --gray-text-2: #a4a4a4;
     --gray-text-3: #656565;
+    --gray-text-4: #6B6B6B;
 
-    --gray-65: #595959;
+
+    --gray-1: #D9D9D9;
+    --gray-2: #F6F6F6;
+
 
     --glass: #ffffff1a;
 
@@ -130,6 +118,31 @@ html {
     --divider: #b3b3b380;
   }
 
+  @theme inline {
+    --primary: var(--primary);
+    --color-foreground: var(--primary-foreground);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-primary: var(--primary);
+    --color-border: hsl(var(--border));
+    --color-input: hsl(var(--input));
+    --color-input-blur: hsl(var(--input) / 0.35);
+    --color-ring: hsl(var(--ring));
+    --color-error: var(--sint-error);
+    --color-success: var(--sint-success);
+    --font-sans: var(--font-geist-sans);
+    --font-mono: var(--font-geist-mono);
+    --popover-background: var(--background);
+    --color-gray-1: var(--gray-1);
+    --color-gray-2: var(--gray-2);
+    --color-gray-text-4: var(--gray-text-4);
+    --color-gray-text-5: var(--gray-text-5);
+    --color-sint-green: var(--sint-green);
+    --color-sint-error: var(--sint-error);
+    --color-sint-error-2: var(--sint-error-2);
+  }
+
   :root[data-theme="DARK"] {
     --app-background-color: #1c1e21;
     --app-primary-color-1: #11161a;
@@ -155,9 +168,12 @@ html {
     --text-default: #ffffff;
 
     --input: var(--app-background-color);
+
     --input-border: #ffffff;
     --input-border-2: #ffffff1a;
     --input-border-blur: #ffffff36;
+
+   
 
     --popover: var(--app-background-color);
 
@@ -231,4 +247,8 @@ body {
     "Noto Sans",
     "Apple Color Emoji",
     "Segoe UI Emoji";
+}
+
+button {
+  cursor: pointer;
 }

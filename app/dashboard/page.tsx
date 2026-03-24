@@ -3,6 +3,8 @@ import { useAuthContext } from "@/context/AuthContext";
 import { useStatsContext } from "@/context/prefetch/StatsContext";
 import { CalendarDays, Filter, TrendingDown, TrendingUp } from "lucide-react";
 import Image from "next/image";
+import { Rect1, Rect2, Rect3 } from "./_shared/rectangles";
+import { MembersIconFilled } from "./_shared/icons/MembersIcon";
 
 function StatCard({
   title,
@@ -16,35 +18,29 @@ function StatCard({
   deltaPositive?: boolean;
 }) {
   return (
-    <div className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-zinc-200/70">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="text-sm text-zinc-500">{title}</p>
-          <p className="mt-2 text-3xl font-semibold tracking-tight text-zinc-900">
-            {value}
-          </p>
-          <div className="mt-2 flex items-center gap-2 text-sm">
-            <span
-              className={[
-                "inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-semibold",
-                deltaPositive
-                  ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100"
-                  : "bg-rose-50 text-rose-700 ring-1 ring-rose-100",
-              ].join(" ")}
-            >
-              {deltaPositive ? (
-                <TrendingUp className="h-3.5 w-3.5" />
-              ) : (
-                <TrendingDown className="h-3.5 w-3.5" />
-              )}
-              {deltaLabel}
-            </span>
-            <span className="text-zinc-500">from last month</span>
-          </div>
-        </div>
-        <div className="grid h-10 w-10 place-items-center rounded-2xl bg-violet-600/10 text-violet-700">
-          <div className="h-4 w-4 rounded-full bg-violet-600" />
-        </div>
+    <div className="rounded-[15px] bg-white shadow-sm border border-gray-1 flex flex-col gap-4 p-4">
+      <div className="flex items-center gap-[6px]">
+        <MembersIconFilled />
+        <span className="text-gray-text-4">{title}</span>
+      </div>
+      <p className="text-3xl font-semibold tracking-tight">{value}</p>
+      <div className="flex items-center gap-2 text-sm">
+        <span
+          className={[
+            "inline-flex items-center gap-1 rounded-lg text-xs font-semibold",
+            deltaPositive
+              ? " text-sint-green "
+              : " text-sint-error-2",
+          ].join(" ")}
+        >
+          {deltaPositive ? (
+            <TrendingUp className="h-3.5 w-3.5" />
+          ) : (
+            <TrendingDown className="h-3.5 w-3.5" />
+          )}
+          {deltaLabel}
+        </span>
+        <span>from last month</span>
       </div>
     </div>
   );
@@ -62,7 +58,7 @@ function SectionCard({
   return (
     <section className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-zinc-200/70">
       <div className="flex items-center justify-between gap-3">
-        <h2 className="text-sm font-semibold text-zinc-900">{title}</h2>
+        <h2 className="text-gray-text-4">{title}</h2>
         {right}
       </div>
       <div className="mt-4">{children}</div>
@@ -74,29 +70,29 @@ export default function DashboardPage() {
   const { stats } = useStatsContext();
   const { user } = useAuthContext();
   return (
-    <div className="space-y-6">
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-violet-600 to-violet-800 p-7 text-white shadow-sm">
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-white/40 blur-2xl" />
-          <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-white/30 blur-2xl" />
-        </div>
+    <div className="flex flex-col gap-8 w-full">
+      <section className="relative overflow-hidden rounded-3xl bg-primary py-[34px] px-12 text-white shadow-sm">
         <div className="relative">
-          <p className="text-sm/6 text-white/80">Dashboard</p>
-          <h1 className="mt-2 text-2xl font-semibold tracking-tight">
+          <h1 className="text-2xl font-semibold tracking-tight">
             Hello, {user?.first_name} {user?.last_name}
           </h1>
-          <p className="mt-1 text-sm text-white/80">
-            It’s a blessing to have you with us today.
-          </p>
+          <p className="mt-1">It’s a blessing to have you with us today.</p>
+        </div>
+        <div className="absolute right-[150px] bottom-0">
+          <Rect3 />
+        </div>
+        <div className="absolute right-[30px] top-[-2px] z-10">
+          <Rect2 />
+        </div>
+        <div className="absolute right-[-2px] bottom-0">
+          <Rect1 />
         </div>
       </section>
 
       <div>
         <div className="flex items-center justify-between gap-3">
-          <h2 className="text-xl font-semibold tracking-tight text-zinc-900">
-            Overview
-          </h2>
-          <div className="flex items-center gap-2">
+          <h2 className="text-2xl font-bold tracking-tight">Overview</h2>
+          {/* <div className="flex items-center gap-2">
             <button
               type="button"
               className="inline-flex items-center gap-2 rounded-xl bg-white px-3 py-2 text-sm font-semibold text-zinc-700 shadow-sm ring-1 ring-zinc-200/70 hover:bg-zinc-50"
@@ -111,7 +107,7 @@ export default function DashboardPage() {
             >
               <Filter className="h-4 w-4 text-zinc-500" />
             </button>
-          </div>
+          </div> */}
         </div>
 
         <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -146,25 +142,25 @@ export default function DashboardPage() {
         <SectionCard
           title="Registered Members"
           right={
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 text-gray-text-4 bg-gray-2  rounded-xl">
               <button
                 type="button"
-                className="inline-flex items-center gap-2 rounded-xl bg-zinc-50 px-3 py-2 text-xs font-semibold text-zinc-700 ring-1 ring-zinc-200/70 hover:bg-zinc-100"
+                className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm"
               >
-                <CalendarDays className="h-4 w-4 text-zinc-500" />
+                <CalendarDays className="h-4 w-4 text-gray-text-4" />
                 Last year
               </button>
               <button
                 type="button"
-                className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-zinc-50 text-zinc-700 ring-1 ring-zinc-200/70 hover:bg-zinc-100"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-xl"
                 aria-label="Filter"
               >
-                <Filter className="h-4 w-4 text-zinc-500" />
+                <Filter className="h-4 w-4 text-gray-text-4" />
               </button>
             </div>
           }
         >
-          <div className="grid h-[320px] place-items-center rounded-2xl bg-zinc-50 ring-1 ring-zinc-200/70">
+          <div className="grid h-[320px] place-items-center rounded-2xl ring-1 ring-zinc-200/70">
             <div className="text-center">
               <p className="text-sm font-semibold text-zinc-900">
                 Chart placeholder
@@ -179,12 +175,22 @@ export default function DashboardPage() {
         <SectionCard
           title="Recent"
           right={
-            <button
-              type="button"
-              className="text-xs font-semibold text-zinc-500 hover:text-zinc-900"
-            >
-              See all
-            </button>
+            <div className="flex items-center gap-2 text-gray-text-4 bg-gray-2  rounded-xl">
+              <button
+                type="button"
+                className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm"
+              >
+                <CalendarDays className="h-4 w-4 text-gray-text-4" />
+                Last year
+              </button>
+              <button
+                type="button"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-xl"
+                aria-label="Filter"
+              >
+                <Filter className="h-4 w-4 text-gray-text-4" />
+              </button>
+            </div>
           }
         >
           {/* <div className="space-y-3">
@@ -220,7 +226,7 @@ export default function DashboardPage() {
               </div>
             ))}
           </div> */}
-            <div className="grid h-[320px] place-items-center rounded-2xl bg-zinc-50 ring-1 ring-zinc-200/70">
+          <div className="grid h-[320px] place-items-center rounded-2xl bg-zinc-50 ring-1 ring-zinc-200/70">
             <div className="text-center">
               <p className="text-sm font-semibold text-zinc-900">
                 Recent Records
@@ -235,4 +241,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-

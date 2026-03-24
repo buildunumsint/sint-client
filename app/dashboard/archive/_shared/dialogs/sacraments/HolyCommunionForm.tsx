@@ -18,6 +18,7 @@ import { useFormik } from "formik";
 import { toast } from "sonner";
 import * as yup from "yup";
 import { useArchiveDialogs } from "../../context/ArchiveDialogsContext";
+import { toastArchiveSuccess } from "../../../../_shared/toast/ToastArchiveSuccess";
 import { Button } from "@/components/ui/button";
 import { DatePicker } from "@/components/ui/datepicker";
 import { useMemo } from "react";
@@ -83,7 +84,7 @@ const HolyCommunionForm = ({
       apiClient.post("/sacraments/holy_communion/new", values),
     onSuccess: (data) => {
       if (data.status) {
-        toast.success(data?.message ?? "Holy Communion created successfully");
+        toastArchiveSuccess("A new Holy Communion record has been uploaded");
         createSacrament.onOpenChange(false);
         return;
       }
@@ -101,7 +102,7 @@ const HolyCommunionForm = ({
       ),
     onSuccess: (data) => {
       if (data.status) {
-        toast.success(data?.message ?? "Holy Communion updated successfully");
+        toastArchiveSuccess("Holy Communion has been updated");
         editSacrament.onOpenChange(false);
         return;
       }
@@ -240,7 +241,7 @@ const HolyCommunionForm = ({
       <Button
         type="submit"
         size="xl"
-        className="w-max bg-purple-700 text-white"
+        className="w-max bg-primary text-white"
         loading={createMut.isPending || editMut.isPending}
       >
         {formType === "create" ? "Create Sacrament" : "Update Sacrament"}

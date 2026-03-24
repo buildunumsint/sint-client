@@ -35,7 +35,7 @@ export const ParishesContextProvider = ({ children }: ParishesContextProviderPro
 
   const { data, isFetching } = useQuery({
     queryKey: ["parishes"],
-    queryFn: () => apiClient.get("/parishes/"),
+    queryFn: () => apiClient.get("/parishes/all"),
     enabled: !!access_token,
   })
   useEffect(() => {

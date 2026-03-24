@@ -22,7 +22,7 @@ export default function Footer() {
                             className="object-contain p-0.5"
                          />
                     </div>
-                    <span className="text-sm font-medium text-gray-200">Unum Sint</span>
+                    <span className="text-sm font-medium text-gray-2">Unum Sint</span>
                 </div>
 
                 {/* Diocese Logo Section */}
@@ -36,7 +36,7 @@ export default function Footer() {
                             className="object-contain p-0.5"
                          />
                     </div>
-                    <span className="text-sm font-medium text-gray-200">Catholic Diocese of Port Harcourt</span>
+                    <span className="text-sm font-medium text-gray-2">Catholic Diocese of Port Harcourt</span>
                 </div>
             </div>
 
@@ -67,7 +67,7 @@ export default function Footer() {
 
             {/* Column 3: Quote (Aligned right on desktop) */}
             <div className="md:text-right pt-2 md:pt-0">
-                <p className="italic text-gray-200 text-base mb-1">
+                <p className="italic text-gray-2 text-base mb-1">
                     'Ut omnes unum sint'
                 </p>
                 <p className="text-gray-400 text-sm">

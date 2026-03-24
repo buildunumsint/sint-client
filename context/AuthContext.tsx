@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useCallback, useContext, useState } from "react";
 
 export type AuthUser = {
   user_id: string;
@@ -26,6 +26,7 @@ export type AuthState = {
 export type AuthContextType = AuthState & {
   updateAccessToken: (token: string) => void;
   updateValues: (data: Partial<AuthState> & { user?: Partial<AuthUser> }) => void;
+  signOut: () => void;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -80,7 +81,16 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     }));
   };
 
-  const authProviderValues: AuthContextType = { ...values, updateAccessToken, updateValues };
+  const signOut = useCallback(() => {
+    setValues(INIT_VALUES);
+  }, []);
+
+  const authProviderValues: AuthContextType = {
+    ...values,
+    updateAccessToken,
+    updateValues,
+    signOut,
+  };
 
   return <AuthContext.Provider value={authProviderValues}>{children}</AuthContext.Provider>;
 };

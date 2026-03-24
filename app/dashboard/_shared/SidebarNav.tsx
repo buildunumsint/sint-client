@@ -37,7 +37,7 @@ export default function SidebarNav({
   }));
 
   return (
-    <nav className="mt-9 gap-4 flex flex-col">
+    <nav className="gap-4 flex flex-col">
       {items.map((item) => {
         const isActive =
           item.href === "/dashboard"
@@ -52,7 +52,7 @@ export default function SidebarNav({
                 className={cx(
                   "flex items-center gap-3 rounded-lg px-3 py-3 text-sm transition m-0",
                   isActive
-                    ? "bg-purple-700 text-white shadow-sm shadow-violet-600/20"
+                    ? "bg-primary text-white shadow-sm shadow-violet-600/20"
                     : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900",
                 )}
               >
@@ -95,7 +95,7 @@ export default function SidebarNav({
                 className={cx(
                   "flex items-center gap-3 rounded-lg px-3 py-3 text-sm transition m-0",
                   isActive
-                    ? "bg-purple-700 text-white shadow-sm shadow-violet-600/20"
+                    ? "bg-primary text-white shadow-sm shadow-violet-600/20"
                     : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900",
                 )}
               >

@@ -1,4 +1,5 @@
 import { ArchiveDialogsProvider } from "./_shared/context/ArchiveDialogsContext";
+import CreateParishDialog from "./_shared/dialogs/parish";
 import CreateSacramentDialog from "./_shared/dialogs/sacraments";
 import EditSacramentDialog from "./_shared/dialogs/sacraments/edit";
 
@@ -11,6 +12,7 @@ const Layout = ({ children }: LayoutProps) => {
             {children}
             <CreateSacramentDialog />
             <EditSacramentDialog />
+            <CreateParishDialog/>
         </ArchiveDialogsProvider>
      );
 }

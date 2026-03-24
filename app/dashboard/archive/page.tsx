@@ -1,25 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense } from "react";
 import AllSacraments from "./_shared/AllSacraments";
 import TitleHeader from "./_shared/TitleHeader";
 import AddRecordButton from "./_shared/ buttons/AddRecordButton";
+import ArchiveSearchBar from "./_shared/header/ArchiveSearchBar";
 
-export default function ArchivePage() {
-  const [filter, setFilter] = useState("All Parishes");
+function ArchivePageContent() {
   return (
     <div className="space-y-10">
       <TitleHeader title="Sacramental Records">
         <div className="flex w-full gap-10">
-          <div className="rounded-lg bg-[#f6f6f6ae] p-5 flex h-full w-full flex-1 ring-1 ring-zinc-200/70">
-          </div>
+          <ArchiveSearchBar />
           <AddRecordButton sacramentType={null} />
         </div>
       </TitleHeader>
-      <AllSacraments filter={filter} />
+      <AllSacraments />
     </div>
-
-
   );
 }
 
+export default function ArchivePage() {
+  return (
+    <Suspense fallback={<div className="min-h-48 space-y-10" />}>
+      <ArchivePageContent />
+    </Suspense>
+  );
+}

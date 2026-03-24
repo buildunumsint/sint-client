@@ -38,13 +38,14 @@ interface SelectProps {
 
 const SelectTrigger = React.forwardRef<
   React.ComponentRef<typeof SelectPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & SelectProps
->(({ className, children, isInvalid, isSuccess, ...props }, ref) => {
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & SelectProps & { icon?: React.ReactNode }
+>(({ className, children, isInvalid, isSuccess, icon, ...props }, ref) => {
   const borderColor = isInvalid
     ? "border-error"
     : isSuccess
       ? "border-primary"
       : "border-input-blur focus:border-input";
+  const hasIcon = icon;
   return (
     <SelectPrimitive.Trigger
       ref={ref}
@@ -55,7 +56,11 @@ const SelectTrigger = React.forwardRef<
       )}
       {...props}
     >
+      <div className="flex items-center gap-[14px]">
+
+      {hasIcon && <span className="pr-3 border-r border-gray-400">{icon}</span>}
       {children}
+      </div>
       <SelectPrimitive.Icon asChild>
         <ChevronDown className="h-4 w-4 opacity-50" />
       </SelectPrimitive.Icon>
@@ -111,7 +116,7 @@ function SelectContent({
         <SelectPrimitive.Viewport
           data-position={position}
           className={cn(
-            "data-[position=popper]:h-(--radix-select-trigger-height) data-[position=popper]:w-full data-[position=popper]:min-w-(--radix-select-trigger-width)",
+            "data-[position=popper]:h-(--radix-select-trigger-height)  data-[position=popper]:w-full data-[position=popper]:min-w-(--radix-select-trigger-width)",
             position === "popper" && ""
           )}
         >

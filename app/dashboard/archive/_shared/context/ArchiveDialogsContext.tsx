@@ -17,13 +17,15 @@ interface ArchiveDialogsContextType {
         onOpenChange: (open: boolean, sacramentType?: SacramentType | null) => void;
         sacramentType: SacramentType | null;
     }
-
-
     editSacrament: {
         isOpen: boolean;
         initialValues: any;
         onOpenChange: (open: boolean, sacramentType?: SacramentType | null, initialValues?: any) => void;
         sacramentType: SacramentType | null;
+    }
+    createParish: {
+        isOpen: boolean;
+        onOpenChange: (open: boolean) => void;
     }
 
 }
@@ -34,6 +36,7 @@ type ArchiveDialogsState = {
     editSacramentOpen: boolean;
     editSacramentType: SacramentType | null;
     editSacramentInitialValues: any;
+    createParishOpen: boolean;
 };
 
 type ArchiveDialogsAction =
@@ -47,7 +50,11 @@ type ArchiveDialogsAction =
         open: boolean;
         sacramentType: SacramentType | null;
         initialValues: any;
-    };
+    }
+    | {
+        type: "SET_CREATE_PARISH_OPEN";
+        open: boolean;
+    }
 
 const INIT_STATE: ArchiveDialogsState = {
     createSacramentOpen: false,
@@ -55,6 +62,7 @@ const INIT_STATE: ArchiveDialogsState = {
     editSacramentOpen: false,
     editSacramentType: null,
     editSacramentInitialValues: null,
+    createParishOpen: false,
 };
 
 function archiveDialogsReducer(
@@ -74,6 +82,11 @@ function archiveDialogsReducer(
                 editSacramentOpen: action.open,
                 editSacramentType: action.sacramentType,
                 editSacramentInitialValues: action.initialValues,
+            };
+        case "SET_CREATE_PARISH_OPEN":
+            return {
+                ...state,
+                createParishOpen: action.open,
             };
         default:
             return state;
@@ -125,6 +138,13 @@ export const ArchiveDialogsProvider = ({
         [],
     );
 
+    const onCreateParishOpenChange = useCallback(
+        (open: boolean) => {
+            dispatch({ type: "SET_CREATE_PARISH_OPEN", open });
+        },
+        [],
+    );
+
     const value: ArchiveDialogsContextType = useMemo(
         () => ({
             createSacrament: {
@@ -138,9 +158,14 @@ export const ArchiveDialogsProvider = ({
                 sacramentType: state.editSacramentType,
                 initialValues: state.editSacramentInitialValues,
             },
+            createParish: {
+                isOpen: state.createParishOpen,
+                onOpenChange: onCreateParishOpenChange,
+            },
         }),
         [
             state.createSacramentOpen,
+            state.createParishOpen,
             state.sacramentType,
             state.editSacramentOpen,
             state.editSacramentType,

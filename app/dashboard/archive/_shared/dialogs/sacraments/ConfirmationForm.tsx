@@ -18,6 +18,7 @@ import { useFormik } from "formik";
 import { toast } from "sonner";
 import * as yup from "yup";
 import { useArchiveDialogs } from "../../context/ArchiveDialogsContext";
+import { toastArchiveSuccess } from "../../../../_shared/toast/ToastArchiveSuccess";
 import { Button } from "@/components/ui/button";
 import { DatePicker } from "@/components/ui/datepicker";
 import { useMemo } from "react";
@@ -83,7 +84,7 @@ const ConfirmationForm = ({ formType, initialValues }: ConfirmationFormProps) =>
       apiClient.post("/sacraments/confirmation/new", values),
     onSuccess: (data) => {
       if (data.status) {
-        toast.success(data?.message ?? "Confirmation created successfully");
+        toastArchiveSuccess("A new confirmation has been uploaded");
         createSacrament.onOpenChange(false);
         return;
       }
@@ -98,7 +99,7 @@ const ConfirmationForm = ({ formType, initialValues }: ConfirmationFormProps) =>
       apiClient.patch(`/sacraments/confirmation/${initialValues?.confirmation_id}`, values),
     onSuccess: (data) => {
       if (data.status) {
-        toast.success(data?.message ?? "Confirmation updated successfully");
+        toastArchiveSuccess("Confirmation has been updated");
         editSacrament.onOpenChange(false);
         return;
       }
@@ -251,7 +252,7 @@ const ConfirmationForm = ({ formType, initialValues }: ConfirmationFormProps) =>
       <Button
         type="submit"
         size="xl"
-        className="w-max bg-purple-700 text-white"
+        className="w-max bg-primary text-white"
         loading={createMut.isPending || editMut.isPending}
       >
         {formType === "create" ? "Create Sacrament" : "Update Sacrament"}

@@ -9,8 +9,8 @@ const AddRecordButton = ({ sacramentType }: AddRecordButtonProps) => {
     const handleClick = () => {
         createSacrament.onOpenChange(true, sacramentType);
     }
-    return (<button onClick={handleClick} className="flex items-center gap-2.5 rounded-lg bg-purple-700 px-4 py-2 text-white w-max">
-        <Plus />
+    return (<button onClick={handleClick} className="flex min-w-max items-center gap-2.5 rounded-lg bg-primary px-4 py-2 text-white w-max">
+        <Plus className="w-3 h-3" />
         Add New Record
     </button>);
 }

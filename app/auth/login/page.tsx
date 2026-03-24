@@ -178,7 +178,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loginMut.isPending}
-              className="w-full rounded-xl bg-purple-700 px-4 py-3 text-sm font-medium text-background transition disabled:opacity-60"
+              className="w-full rounded-xl bg-primary px-4 py-3 text-sm font-medium text-background transition disabled:opacity-60"
             >
               {loginMut.isPending ? "Signing in…" : "Sign in"}
             </button>

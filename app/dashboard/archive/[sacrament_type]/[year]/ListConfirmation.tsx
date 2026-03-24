@@ -8,6 +8,8 @@ import { useMemo } from "react";
 import { useArchiveDialogs } from "../../_shared/context/ArchiveDialogsContext";
 import TitleHeader from "../../_shared/TitleHeader";
 import AddRecordButton from "../../_shared/ buttons/AddRecordButton";
+import ArchiveSearchBar from "../../_shared/header/ArchiveSearchBar";
+import { useArchiveFilters } from "../../_shared/hooks/useArchiveFilters";
 
 interface ListConfirmationPageProps {
   year: string;
@@ -16,14 +18,15 @@ interface ListConfirmationPageProps {
 const ListConfirmation = ({ year }: ListConfirmationPageProps) => {
   const { access_token, updateAccessToken } = useAuthContext();
   const { editSacrament } = useArchiveDialogs();
+  const { name, parishId } = useArchiveFilters();
   const apiClient = createApiClientSecured(
     access_token,
     updateAccessToken,
     "json"
   );
   const { data, isFetching, refetch } = useQuery({
-    queryKey: ["sacraments", "confirmation", year],
-    queryFn: () => apiClient.get(`/sacraments/confirmations?year=${year}`),
+    queryKey: ["sacraments", "confirmation", year, name, parishId],
+    queryFn: () => apiClient.get(`/sacraments/confirmations?year=${year}&name=${name}&parish=${parishId}`),
     enabled: !!access_token,
   });
 
@@ -55,7 +58,7 @@ const ListConfirmation = ({ year }: ListConfirmationPageProps) => {
     <div className="space-y-10">
       <TitleHeader title={`Confirmation - ${year}`}>
         <div className="flex w-full gap-10">
-          <div className="rounded-lg bg-[#f6f6f6ae] p-5 flex h-full w-full flex-1 ring-1 ring-zinc-200/70"></div>
+          <ArchiveSearchBar />
           <AddRecordButton sacramentType="confirmation" />
         </div>
       </TitleHeader>

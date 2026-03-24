@@ -18,6 +18,7 @@ import { useFormik } from "formik";
 import { toast } from "sonner";
 import * as yup from "yup";
 import { useArchiveDialogs } from "../../context/ArchiveDialogsContext";
+import { toastArchiveSuccess } from "../../../../_shared/toast/ToastArchiveSuccess";
 import { Button } from "@/components/ui/button";
 import { DatePicker } from "@/components/ui/datepicker";
 import { useMemo } from "react";
@@ -94,7 +95,7 @@ const MatrimonyForm = ({ formType, initialValues }: MatrimonyFormProps) => {
       apiClient.post("/sacraments/matrimony/new", values),
     onSuccess: (data) => {
       if (data.status) {
-        toast.success(data?.message ?? "Matrimony created successfully");
+        toastArchiveSuccess("A new matrimony has been uploaded");
         createSacrament.onOpenChange(false);
         return;
       }
@@ -112,7 +113,7 @@ const MatrimonyForm = ({ formType, initialValues }: MatrimonyFormProps) => {
       ),
     onSuccess: (data) => {
       if (data.status) {
-        toast.success(data?.message ?? "Matrimony updated successfully");
+        toastArchiveSuccess("Matrimony has been updated");
         editSacrament.onOpenChange(false);
         return;
       }
@@ -292,7 +293,7 @@ const MatrimonyForm = ({ formType, initialValues }: MatrimonyFormProps) => {
       <Button
         type="submit"
         size="xl"
-        className="w-max bg-purple-700 text-white"
+        className="w-max bg-primary text-white"
         loading={createMut.isPending || editMut.isPending}
       >
         {formType === "create" ? "Create Sacrament" : "Update Sacrament"}

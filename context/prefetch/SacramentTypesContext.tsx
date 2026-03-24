@@ -3,6 +3,7 @@ import { useAuthContext } from "../AuthContext";
 import { createApiClientSecured } from "@/services/apiClient";
 import { useQuery } from "@tanstack/react-query";
 import { parseArray } from "@/lib/formatters";
+import { useArchiveFilters } from "@/app/dashboard/archive/_shared/hooks/useArchiveFilters";
 
 export type SacramentTypesContextType = {
   sacramentTypes: SacramentsType[];
@@ -47,12 +48,13 @@ export const sacramentNameFromType = (type: SacramentType | string) => {
 export const SacramentTypesContextProvider = ({ children }: SacramentTypesContextProviderProps) => {
   const [sacramentsTypes, setSacramentsTypes] = useState<SacramentsType[]>(INIT_VALUES.sacramentTypes);
   const { access_token, updateAccessToken } = useAuthContext();
+  const { name, parishId } = useArchiveFilters();
 
   const apiClient = createApiClientSecured(access_token, updateAccessToken);
 
   const { data, isFetching } = useQuery({
-    queryKey: ["sacraments_types"],
-    queryFn: () => apiClient.get("/sacraments/types"),
+    queryKey: ["sacraments_types", name, parishId],
+    queryFn: () => apiClient.get(`/sacraments/types?parish=${parishId}`),
     enabled: !!access_token,
   })
   useEffect(() => {

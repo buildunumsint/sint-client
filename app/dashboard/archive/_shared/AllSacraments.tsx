@@ -3,22 +3,25 @@
 import { useRouter } from "next/navigation";
 import FolderIcon from "../../_shared/icons/FolderIcon";
 import { sacramentNameFromType, useSacramentTypesContext } from "@/context/prefetch/SacramentTypesContext";
+import { useParishesContext } from "@/context/prefetch/ParishesContext";
+import { useArchiveFilters } from "./hooks/useArchiveFilters";
 
-interface Sacraments {
-    filter: string;
-}
+const AllSacraments = () => {
+    const { name, parishId } = useArchiveFilters();
+    const { parishes } = useParishesContext();
+    const parishName = parishId
+        ? parishes.find((p) => p.parish_id === parishId)?.parish_name ?? parishId
+        : null;
 
-
-const AllSacraments = ({ filter }: Sacraments) => {
     const { sacramentTypes } = useSacramentTypesContext();
     const router = useRouter();
     const goToSacramentRecords = (sacrament_type: string) => {
-        router.push(`/dashboard/archive/${sacrament_type}`);
+        router.push(`/dashboard/archive/${sacrament_type}?name=${name}&parish=${parishId}`);
     }
     return (
         <div>
-            <h2 className="text-lg font-bold tracking-tight text-zinc-900 mb-10">{
-                filter}
+            <h2 className="mb-10 text-lg font-bold tracking-tight text-zinc-900">
+                {[name, parishName].filter(Boolean).join(" — ") || "All Parishes"}
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4">
                 {sacramentTypes.map((s) => (

@@ -1,11 +1,13 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useAuthContext } from "@/context/AuthContext";
 import { X } from "lucide-react";
 import SidebarNav from "./SidebarNav";
 import { DASHBOARD_BOTTOM_NAV, DASHBOARD_NAV } from "../nav";
+import UnumSintIcon from "./icons/UnumSintIcon";
+import Divider from "@/components/ui/divider";
 
 export default function DashboardSidebar({
   mobile,
@@ -15,6 +17,8 @@ export default function DashboardSidebar({
   onClose?: () => void;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { signOut } = useAuthContext();
   const section = pathname.split("/")[2] ?? "";
 
   return (
@@ -29,16 +33,8 @@ export default function DashboardSidebar({
     >
       <div className="flex items-center justify-between">
         <Link href="/dashboard" className="flex items-center gap-2">
-          <div className="grid h-9 w-9 place-items-center rounded-xl bg-violet-600/10">
-            <Image
-              src="/Unum_Logo.svg"
-              alt="Unum Sint"
-              width={22}
-              height={22}
-              className="h-[22px] w-[22px]"
-            />
-          </div>
-          <span className="text-base font-semibold tracking-tight text-zinc-900">
+          <UnumSintIcon />
+          <span className="text-base font-semibold tracking-tight">
             Unum Sint
           </span>
         </Link>
@@ -54,6 +50,8 @@ export default function DashboardSidebar({
           </button>
         )}
       </div>
+
+      <Divider className="my-6" />
 
       <SidebarNav
         key={`main-${section}`}
@@ -72,24 +70,22 @@ export default function DashboardSidebar({
         <div className="rounded-2xl border border-zinc-200/70 bg-linear-to-br from-violet-50 to-white p-4">
           <p className="text-sm font-semibold text-zinc-900">Need help?</p>
           <p className="mt-1 text-xs text-zinc-600">
-            Visit the Help Center for quick answers.
+            Email us at <a href="mailto:buildunumsint@gmail.com" className="underline">buildunumsint@gmail.com</a> for help.
           </p>
-          <Link
-            href="/"
-            className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-white px-3 py-2 text-xs font-semibold text-zinc-900 shadow-sm ring-1 ring-zinc-200/70 hover:bg-zinc-50"
-          >
-            Help Center
-          </Link>
+          
         </div>
 
-        <Link
-          href="/login"
+        <button
+          type="button"
+          onClick={() => {
+            signOut();
+            router.push("/");
+          }}
           className="mt-4 inline-flex w-full items-center justify-center rounded-xl px-3 py-2 text-sm font-semibold text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
         >
           Log Out
-        </Link>
+        </button>
       </div>
     </aside>
   );
 }
-

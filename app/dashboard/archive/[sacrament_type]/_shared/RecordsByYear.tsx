@@ -7,10 +7,11 @@ import { useEffect, useState } from "react";
 import { parseArray } from "@/lib/formatters";
 import FolderIcon from "@/app/dashboard/_shared/icons/FolderIcon";
 import { useRouter } from "next/navigation";
+import { useArchiveFilters } from "../../_shared/hooks/useArchiveFilters";
 import TitleHeader from "../../_shared/TitleHeader";
-import { Plus } from "lucide-react";
 import { sacramentNameFromType } from "@/context/prefetch/SacramentTypesContext";
 import AddRecordButton from "../../_shared/ buttons/AddRecordButton";
+import ArchiveSearchBar from "../../_shared/header/ArchiveSearchBar";
 
 interface RecordsByYearProps {
     sacrament_type: string;
@@ -24,6 +25,7 @@ type UserSacramentYears = {
 const RecordsByYear = ({ sacrament_type }: RecordsByYearProps) => {
     const router = useRouter();
     const { access_token, updateValues } = useAuthContext();
+    const {name, parishId} = useArchiveFilters()
     const [sacramentsYears, setSacramentsYears] = useState<UserSacramentYears[]>([]);
     const setAccessToken = (token: string) => {
         updateValues({ access_token: token });
@@ -31,8 +33,8 @@ const RecordsByYear = ({ sacrament_type }: RecordsByYearProps) => {
     const apiClient = createApiClientSecured(access_token, setAccessToken);
 
     const { data, isFetching } = useQuery({
-        queryKey: ["sacraments_years", sacrament_type],
-        queryFn: () => apiClient.get(`sacraments/years?sacrament=${sacrament_type}`),
+        queryKey: ["sacraments_years", sacrament_type, name, parishId],
+        queryFn: () => apiClient.get(`sacraments/years?sacrament=${sacrament_type}&name=${name}&parish=${parishId}`),
         enabled: !!access_token,
     })
     useEffect(() => {
@@ -42,15 +44,14 @@ const RecordsByYear = ({ sacrament_type }: RecordsByYearProps) => {
     }, [data, isFetching]);
 
     const goToSacramentRecords = (year: string) => {
-        router.push(`/dashboard/archive/${sacrament_type}/${year}`);
+        router.push(`/dashboard/archive/${sacrament_type}/${year}?name=${name}&parish=${parishId}`);
     }
     return (
         <div className="space-y-10">
 
             <TitleHeader title={sacramentNameFromType(sacrament_type as SacramentType)}>
                 <div className="flex w-full gap-10">
-                    <div className="rounded-lg bg-[#f6f6f6ae] p-5 flex h-full w-full flex-1 ring-1 ring-zinc-200/70">
-                    </div>
+                    <ArchiveSearchBar />
                     <AddRecordButton sacramentType={sacrament_type as SacramentType} />
                 </div>
             </TitleHeader>

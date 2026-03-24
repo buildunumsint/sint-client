@@ -18,6 +18,7 @@ import { useFormik } from "formik";
 import { toast } from "sonner";
 import * as yup from "yup";
 import { useArchiveDialogs } from "../../context/ArchiveDialogsContext";
+import { toastArchiveSuccess } from "../../../../_shared/toast/ToastArchiveSuccess";
 import { Button } from "@/components/ui/button";
 import { DatePicker } from "@/components/ui/datepicker";
 import { useMemo } from "react";
@@ -83,7 +84,7 @@ const HolyOrdersForm = ({ formType, initialValues }: HolyOrdersFormProps) => {
       apiClient.post("/sacraments/holy_orders/new", values),
     onSuccess: (data) => {
       if (data.status) {
-        toast.success(data?.message ?? "Holy Orders created successfully");
+        toastArchiveSuccess("A new Holy Orders record has been uploaded");
         createSacrament.onOpenChange(false);
         return;
       }
@@ -101,7 +102,7 @@ const HolyOrdersForm = ({ formType, initialValues }: HolyOrdersFormProps) => {
       ),
     onSuccess: (data) => {
       if (data.status) {
-        toast.success(data?.message ?? "Holy Orders updated successfully");
+        toastArchiveSuccess("Holy Orders has been updated");
         editSacrament.onOpenChange(false);
         return;
       }
@@ -255,7 +256,7 @@ const HolyOrdersForm = ({ formType, initialValues }: HolyOrdersFormProps) => {
       <Button
         type="submit"
         size="xl"
-        className="w-max bg-purple-700 text-white"
+        className="w-max bg-primary text-white"
         loading={createMut.isPending || editMut.isPending}
       >
         {formType === "create" ? "Create Sacrament" : "Update Sacrament"}

@@ -16,6 +16,7 @@ import { useFormik } from "formik";
 import { toast } from "sonner";
 import * as yup from "yup";
 import { useArchiveDialogs } from "../../context/ArchiveDialogsContext";
+import { toastArchiveSuccess } from "../../../../_shared/toast/ToastArchiveSuccess";
 import { Button } from "@/components/ui/button";
 import { DatePicker } from "@/components/ui/datepicker";
 import { useMemo } from "react";
@@ -116,7 +117,7 @@ const BaptismForm = ({ formType, initialValues }: BaptismFormProps) => {
         onSuccess: (data) => {
             if (data.status) {
                 console.log(data);
-                toast.success(data?.message || "Sacrament created successfully");
+                toastArchiveSuccess("A new baptism has been uploaded");
                 createSacrament.onOpenChange(false);
                 return;
             }
@@ -136,7 +137,7 @@ const BaptismForm = ({ formType, initialValues }: BaptismFormProps) => {
         onSuccess: (data) => {
             if (data.status) {
                 console.log(data);
-                toast.success(data?.message || "Sacrament updated successfully");
+                toastArchiveSuccess("Baptism has been updated");
                 editSacrament.onOpenChange(false);
                 return;
             }
@@ -352,7 +353,7 @@ const BaptismForm = ({ formType, initialValues }: BaptismFormProps) => {
                     }
                 />
             </FormRow>
-            <Button type="submit" size="xl" className="w-max bg-purple-700 text-white" loading={createMut.isPending || editMut.isPending}>
+            <Button type="submit" size="xl" className="w-max bg-primary text-white" loading={createMut.isPending || editMut.isPending}>
                 {formType === "create" ? "Create Sacrament" : "Update Sacrament"}
             </Button>
         </form>

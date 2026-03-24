@@ -2,6 +2,7 @@
 
 import { Bell, Menu, Search, Settings } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function DashboardTopbar({
   onOpenSidebar,
@@ -20,12 +21,12 @@ export default function DashboardTopbar({
           <Menu className="h-5 w-5" />
         </button>
 
-        <div className="hidden text-xl font-semibold text-zinc-900 lg:block">
+        <Link href="/dashboard" className="hidden text-lg text-gray-text-4 lg:block">
           Dashboard
-        </div>
+        </Link>
 
         <div className="ml-auto flex flex-1 items-center justify-end gap-3">
-          <div className="relative hidden w-full max-w-[420px] lg:block">
+          {/* <div className="relative hidden w-full max-w-[420px] lg:block">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
             <input
               placeholder="Search"
@@ -47,7 +48,7 @@ export default function DashboardTopbar({
             aria-label="Notifications"
           >
             <Bell className="h-5 w-5" />
-          </button>
+          </button> */}
 
           <div className="h-10 w-10 overflow-hidden rounded-2xl bg-zinc-200 ring-1 ring-zinc-200/70">
             <Image
