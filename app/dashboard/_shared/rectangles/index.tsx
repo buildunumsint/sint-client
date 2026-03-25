@@ -25,8 +25,8 @@ export const Rect1 = () => {
           y2="263.261"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#371855" />
-          <stop offset="1" stop-color="#7834BB" />
+          <stop stopColor="#371855" />
+          <stop offset="1" stopColor="#7834BB" />
         </linearGradient>
       </defs>
     </svg>
@@ -60,8 +60,8 @@ export const Rect2 = () => {
           y2="168.165"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#371855" />
-          <stop offset="1" stop-color="#7834BB" />
+          <stop stopColor="#371855" />
+          <stop offset="1" stopColor="#7834BB" />
         </linearGradient>
       </defs>
     </svg>
@@ -95,8 +95,8 @@ export const Rect3 = () => {
           y2="183.522"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#7834BB" />
-          <stop offset="1" stop-color="#371855" />
+          <stop stopColor="#7834BB" />
+          <stop offset="1" stopColor="#371855" />
         </linearGradient>
       </defs>
     </svg>

@@ -26,6 +26,7 @@ import {
   CreateConfirmationSacramentValues,
   sacramentKeyMap,
 } from "./confirmation";
+import ParishSelectWithSearch from "./ParishSelectWithSearch";
 
 interface ConfirmationFormProps {
   formType: "create" | "edit";
@@ -195,28 +196,17 @@ const ConfirmationForm = ({ formType, initialValues }: ConfirmationFormProps) =>
       <FormRow>
         <SelectGroup>
           <SelectLabel>Parish</SelectLabel>
-          <Select
+          <ParishSelectWithSearch
+            parishes={parishes}
             name={sacramentKeyMap.ParishID}
             value={formik.values[sacramentKeyMap.ParishID]}
             onValueChange={handleParishChange}
-          >
-            <SelectTrigger
-              isInvalid={Boolean(formik.errors[sacramentKeyMap.ParishID])}
-              isSuccess={Boolean(
-                formik.touched[sacramentKeyMap.ParishID] &&
-                  !formik.errors[sacramentKeyMap.ParishID]
-              )}
-            >
-              <SelectValue placeholder="Select a parish" />
-            </SelectTrigger>
-            <SelectContent>
-              {parishes.map((parish) => (
-                <SelectItem key={parish.parish_id} value={parish.parish_id}>
-                  {parish.parish_name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            isInvalid={Boolean(formik.errors[sacramentKeyMap.ParishID])}
+            isSuccess={Boolean(
+              formik.touched[sacramentKeyMap.ParishID] &&
+                !formik.errors[sacramentKeyMap.ParishID]
+            )}
+          />
         </SelectGroup>
         <Input
           label="Officiating Bishop"

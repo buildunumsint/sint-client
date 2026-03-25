@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { DatePicker } from "@/components/ui/datepicker";
 import { useMemo } from "react";
 import { CreateBaptismSacramentValues, sacramentKeyMap } from "./baptism";
+import ParishSelectWithSearch from "./ParishSelectWithSearch";
 
 interface BaptismFormProps {
     formType: "create" | "edit";
@@ -299,30 +300,19 @@ const BaptismForm = ({ formType, initialValues }: BaptismFormProps) => {
             <FormRow>
                 <SelectGroup>
                     <SelectLabel>Parish</SelectLabel>
-                    <Select
+                    <ParishSelectWithSearch
+                        parishes={parishes}
                         name={sacramentKeyMap.ParishID}
-                        value={formik.values[sacramentKeyMap.ParishID]}
+                        value={formik.values[sacramentKeyMap.ParishID] ?? ""}
                         onValueChange={(value) =>
                             formik.setFieldValue(sacramentKeyMap.ParishID, value)
                         }
-                    >
-                        <SelectTrigger
-                            isInvalid={Boolean(formik.errors[sacramentKeyMap.ParishID])}
-                            isSuccess={Boolean(
-                                formik.touched[sacramentKeyMap.ParishID] &&
-                                !formik.errors[sacramentKeyMap.ParishID],
-                            )}
-                        >
-                            <SelectValue placeholder="Select a parish" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {parishes.map((parish, index) => (
-                                <SelectItem key={index} value={parish.parish_id}>
-                                    {parish.parish_name}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
+                        isInvalid={Boolean(formik.errors[sacramentKeyMap.ParishID])}
+                        isSuccess={Boolean(
+                            formik.touched[sacramentKeyMap.ParishID] &&
+                            !formik.errors[sacramentKeyMap.ParishID],
+                        )}
+                    />
                 </SelectGroup>
                 <Input
                     label="Minister "
