@@ -54,7 +54,7 @@ const toDateString = (d: Date | string | undefined): string =>
 const ConfirmationForm = ({ formType, initialValues }: ConfirmationFormProps) => {
   const { access_token, updateAccessToken } = useAuthContext();
   const { parishes } = useParishesContext();
-  const { createSacrament, editSacrament } = useArchiveDialogs();
+  const { createSacrament, editSacrament, triggerSacramentRefetch } = useArchiveDialogs();
   const apiClient = createApiClientSecured(access_token, updateAccessToken);
 
   const initialFormValues = useMemo(() => {
@@ -86,6 +86,7 @@ const ConfirmationForm = ({ formType, initialValues }: ConfirmationFormProps) =>
     onSuccess: (data) => {
       if (data.status) {
         toastArchiveSuccess("A new confirmation has been uploaded");
+        triggerSacramentRefetch("confirmation");
         createSacrament.onOpenChange(false);
         return;
       }
@@ -101,6 +102,7 @@ const ConfirmationForm = ({ formType, initialValues }: ConfirmationFormProps) =>
     onSuccess: (data) => {
       if (data.status) {
         toastArchiveSuccess("Confirmation has been updated");
+        triggerSacramentRefetch("confirmation");
         editSacrament.onOpenChange(false);
         return;
       }

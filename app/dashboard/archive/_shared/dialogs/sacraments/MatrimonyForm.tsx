@@ -58,7 +58,7 @@ const toDateString = (d: Date | string | undefined): string =>
 const MatrimonyForm = ({ formType, initialValues }: MatrimonyFormProps) => {
   const { access_token, updateAccessToken } = useAuthContext();
   const { parishes } = useParishesContext();
-  const { createSacrament, editSacrament } = useArchiveDialogs();
+  const { createSacrament, editSacrament, triggerSacramentRefetch } = useArchiveDialogs();
   const apiClient = createApiClientSecured(access_token, updateAccessToken);
 
   const initialFormValues = useMemo(() => {
@@ -97,6 +97,7 @@ const MatrimonyForm = ({ formType, initialValues }: MatrimonyFormProps) => {
     onSuccess: (data) => {
       if (data.status) {
         toastArchiveSuccess("A new matrimony has been uploaded");
+        triggerSacramentRefetch("matrimony");
         createSacrament.onOpenChange(false);
         return;
       }
@@ -115,6 +116,7 @@ const MatrimonyForm = ({ formType, initialValues }: MatrimonyFormProps) => {
     onSuccess: (data) => {
       if (data.status) {
         toastArchiveSuccess("Matrimony has been updated");
+        triggerSacramentRefetch("matrimony");
         editSacrament.onOpenChange(false);
         return;
       }

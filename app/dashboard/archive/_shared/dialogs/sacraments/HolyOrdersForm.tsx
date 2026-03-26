@@ -55,7 +55,7 @@ const toDateString = (d: Date | string | undefined): string =>
 const HolyOrdersForm = ({ formType, initialValues }: HolyOrdersFormProps) => {
   const { access_token, updateAccessToken } = useAuthContext();
   const { parishes } = useParishesContext();
-  const { createSacrament, editSacrament } = useArchiveDialogs();
+  const { createSacrament, editSacrament, triggerSacramentRefetch } = useArchiveDialogs();
   const apiClient = createApiClientSecured(access_token, updateAccessToken);
 
   const initialFormValues = useMemo(() => {
@@ -82,10 +82,11 @@ const HolyOrdersForm = ({ formType, initialValues }: HolyOrdersFormProps) => {
   const createMut = useMutation({
     mutationKey: ["create-holy-orders"],
     mutationFn: (values: CreateHolyOrdersSacramentValues) =>
-      apiClient.post("/sacraments/holy_orders/new", values),
+      apiClient.post("/sacraments/holy_order/new", values),
     onSuccess: (data) => {
       if (data.status) {
         toastArchiveSuccess("A new Holy Orders record has been uploaded");
+        triggerSacramentRefetch("holy_orders");
         createSacrament.onOpenChange(false);
         return;
       }
@@ -98,12 +99,13 @@ const HolyOrdersForm = ({ formType, initialValues }: HolyOrdersFormProps) => {
     mutationKey: ["update-holy-orders", initialValues?.holy_orders_id],
     mutationFn: (values: CreateHolyOrdersSacramentValues) =>
       apiClient.patch(
-        `/sacraments/holy_orders/${initialValues?.holy_orders_id}`,
+        `/sacraments/holy_order/${initialValues?.holy_orders_id}`,
         values
       ),
     onSuccess: (data) => {
       if (data.status) {
         toastArchiveSuccess("Holy Orders has been updated");
+        triggerSacramentRefetch("holy_orders");
         editSacrament.onOpenChange(false);
         return;
       }

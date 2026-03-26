@@ -4,7 +4,7 @@ import { useAuthContext } from "@/context/AuthContext";
 import { dateStrokesFull, parseArray } from "@/lib/formatters";
 import { createApiClientSecured } from "@/services/apiClient";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useArchiveDialogs } from "../../_shared/context/ArchiveDialogsContext";
 import TitleHeader from "../../_shared/TitleHeader";
 import AddRecordButton from "../../_shared/ buttons/AddRecordButton";
@@ -17,7 +17,7 @@ interface ListConfirmationPageProps {
 
 const ListConfirmation = ({ year }: ListConfirmationPageProps) => {
   const { access_token, updateAccessToken } = useAuthContext();
-  const { editSacrament } = useArchiveDialogs();
+  const { editSacrament, registerSacramentRefetch } = useArchiveDialogs();
   const { name, parishId } = useArchiveFilters();
   const apiClient = createApiClientSecured(
     access_token,
@@ -29,6 +29,10 @@ const ListConfirmation = ({ year }: ListConfirmationPageProps) => {
     queryFn: () => apiClient.get(`/sacraments/confirmations?year=${year}&name=${name}&parish=${parishId}`),
     enabled: !!access_token,
   });
+
+  useEffect(() => {
+    registerSacramentRefetch("confirmation", refetch);
+  }, [registerSacramentRefetch, refetch]);
 
   const confirmations: Confirmation[] = useMemo(() => {
     if (!data?.status || !data?.data) return [];

@@ -10,6 +10,7 @@ import TitleHeader from "../../_shared/TitleHeader";
 import AddRecordButton from "../../_shared/ buttons/AddRecordButton";
 import ArchiveSearchBar from "../../_shared/header/ArchiveSearchBar";
 import { useArchiveFilters } from "../../_shared/hooks/useArchiveFilters";
+import { useEffect } from "react";
 
 interface ListHolyEucharistPageProps {
   year: string;
@@ -17,18 +18,22 @@ interface ListHolyEucharistPageProps {
 
 const ListHolyEucharist = ({ year }: ListHolyEucharistPageProps) => {
   const { access_token, updateAccessToken } = useAuthContext();
-  const { editSacrament } = useArchiveDialogs();
+  const { editSacrament, registerSacramentRefetch } = useArchiveDialogs();
   const { name, parishId } = useArchiveFilters();
   const apiClient = createApiClientSecured(
     access_token,
     updateAccessToken,
     "json"
   );
-  const { data, isFetching } = useQuery({
+  const { data, isFetching,refetch } = useQuery({
     queryKey: ["sacraments", "holy_eucharist", year, name, parishId],
-    queryFn: () => apiClient.get(`/sacraments/holy_communions?year=${year}&name=${name}&parish=${parishId}`),
+    queryFn: () => apiClient.get(`/sacraments/holy_eucharists?year=${year}&name=${name}&parish=${parishId}`),
     enabled: !!access_token,
   });
+
+  useEffect(() => {
+    registerSacramentRefetch("holy_eucharist", refetch);
+  }, [registerSacramentRefetch, refetch]);
 
   const records: HolyCommunion[] = useMemo(() => {
     if (!data?.status || !data?.data) return [];
@@ -75,9 +80,9 @@ const ListHolyEucharist = ({ year }: ListHolyEucharistPageProps) => {
             </p>
           </div>
         ) : null}
-        {records.map((record) => (
+        {records.map((record,i) => (
           <div
-            key={record.holy_communion_id}
+            key={i+record.holy_communion_id}
             className="w-full rounded-2xl bg-[#F7F7F7] px-4 py-4 sm:px-6 shadow-xs"
           >
             <div className="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-3 lg:grid-cols-6">

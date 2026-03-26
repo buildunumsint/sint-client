@@ -56,7 +56,11 @@ const HolyCommunionForm = ({
 }: HolyCommunionFormProps) => {
   const { access_token, updateAccessToken } = useAuthContext();
   const { parishes } = useParishesContext();
-  const { createSacrament, editSacrament } = useArchiveDialogs();
+  const {
+    createSacrament,
+    editSacrament,
+    triggerSacramentRefetch,
+  } = useArchiveDialogs();
   const apiClient = createApiClientSecured(access_token, updateAccessToken);
 
   const initialFormValues = useMemo(() => {
@@ -82,10 +86,11 @@ const HolyCommunionForm = ({
   const createMut = useMutation({
     mutationKey: ["create-holy-communion"],
     mutationFn: (values: CreateHolyCommunionSacramentValues) =>
-      apiClient.post("/sacraments/holy_communion/new", values),
+      apiClient.post("/sacraments/holy_eucharist/new", values),
     onSuccess: (data) => {
       if (data.status) {
         toastArchiveSuccess("A new Holy Communion record has been uploaded");
+        triggerSacramentRefetch("holy_eucharist");
         createSacrament.onOpenChange(false);
         return;
       }
@@ -98,12 +103,13 @@ const HolyCommunionForm = ({
     mutationKey: ["update-holy-communion", initialValues?.holy_communion_id],
     mutationFn: (values: CreateHolyCommunionSacramentValues) =>
       apiClient.patch(
-        `/sacraments/holy_communion/${initialValues?.holy_communion_id}`,
+        `/sacraments/holy_eucharist/${initialValues?.holy_communion_id}`,
         values
       ),
     onSuccess: (data) => {
       if (data.status) {
         toastArchiveSuccess("Holy Communion has been updated");
+        triggerSacramentRefetch("holy_eucharist");
         editSacrament.onOpenChange(false);
         return;
       }

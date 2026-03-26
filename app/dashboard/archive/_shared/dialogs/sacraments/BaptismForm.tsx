@@ -55,7 +55,7 @@ const DEFAULT_VALUES = {
 const BaptismForm = ({ formType, initialValues }: BaptismFormProps) => {
     const { access_token, updateAccessToken } = useAuthContext();
     const { parishes } = useParishesContext();
-    const { createSacrament, editSacrament } = useArchiveDialogs();
+    const { createSacrament, editSacrament, triggerSacramentRefetch } = useArchiveDialogs();
     const apiClient = createApiClientSecured(access_token, updateAccessToken);
     const initialFormValues = useMemo(() => {
         if (initialValues) {
@@ -119,6 +119,7 @@ const BaptismForm = ({ formType, initialValues }: BaptismFormProps) => {
             if (data.status) {
                 console.log(data);
                 toastArchiveSuccess("A new baptism has been uploaded");
+                triggerSacramentRefetch("baptism");
                 createSacrament.onOpenChange(false);
                 return;
             }
@@ -139,6 +140,7 @@ const BaptismForm = ({ formType, initialValues }: BaptismFormProps) => {
             if (data.status) {
                 console.log(data);
                 toastArchiveSuccess("Baptism has been updated");
+                triggerSacramentRefetch("baptism");
                 editSacrament.onOpenChange(false);
                 return;
             }

@@ -4,7 +4,7 @@ import { useAuthContext } from "@/context/AuthContext";
 import { dateStrokesFull, parseArray } from "@/lib/formatters";
 import { createApiClientSecured } from "@/services/apiClient";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useArchiveDialogs } from "../../_shared/context/ArchiveDialogsContext";
 import TitleHeader from "../../_shared/TitleHeader";
 import AddRecordButton from "../../_shared/ buttons/AddRecordButton";
@@ -17,18 +17,22 @@ interface ListHolyOrdersPageProps {
 
 const ListHolyOrders = ({ year }: ListHolyOrdersPageProps) => {
   const { access_token, updateAccessToken } = useAuthContext();
-  const { editSacrament } = useArchiveDialogs();
+  const { editSacrament, registerSacramentRefetch } = useArchiveDialogs();
   const { name, parishId } = useArchiveFilters();
   const apiClient = createApiClientSecured(
     access_token,
     updateAccessToken,
     "json"
   );
-  const { data, isFetching } = useQuery({
+  const { data, isFetching, refetch } = useQuery({
     queryKey: ["sacraments", "holy_orders", year, name, parishId],
     queryFn: () => apiClient.get(`/sacraments/holy_orders?year=${year}&name=${name}&parish=${parishId}`),
     enabled: !!access_token,
   });
+
+  useEffect(() => {
+    registerSacramentRefetch("holy_orders", refetch);
+  }, [registerSacramentRefetch, refetch]);
 
   const records: HolyOrders[] = useMemo(() => {
     if (!data?.status || !data?.data) return [];
@@ -75,9 +79,9 @@ const ListHolyOrders = ({ year }: ListHolyOrdersPageProps) => {
             </p>
           </div>
         ) : null}
-        {records.map((record) => (
+        {records.map((record,i) => (
           <div
-            key={record.holy_orders_id}
+            key={i+record.holy_orders_id}
             className="w-full rounded-2xl bg-[#F7F7F7] px-4 py-4 sm:px-6 shadow-xs"
           >
             <div className="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-3 lg:grid-cols-6">

@@ -6,6 +6,7 @@ import React, {
     useContext,
     useMemo,
     useReducer,
+    useRef,
 } from "react";
 
 
@@ -27,6 +28,14 @@ interface ArchiveDialogsContextType {
         isOpen: boolean;
         onOpenChange: (open: boolean) => void;
     }
+
+    // Allows list pages to register their react-query `refetch` function so
+    // sacrament dialogs can refresh the corresponding list after mutations.
+    registerSacramentRefetch: (
+        sacramentType: SacramentType,
+        refetchFn: () => Promise<unknown> | unknown,
+    ) => void;
+    triggerSacramentRefetch: (sacramentType: SacramentType) => void;
 
 }
 
@@ -113,6 +122,9 @@ export const ArchiveDialogsProvider = ({
     children: React.ReactNode;
 }) => {
     const [state, dispatch] = useReducer(archiveDialogsReducer, INIT_STATE);
+    const sacramentRefetchMapRef = useRef<
+        Partial<Record<SacramentType, () => Promise<unknown> | unknown>>
+    >({});
 
     const onCreateSacramentOpenChange = useCallback(
         (open: boolean, sacramentType: SacramentType | null = null) => {
@@ -145,6 +157,24 @@ export const ArchiveDialogsProvider = ({
         [],
     );
 
+    const registerSacramentRefetch = useCallback(
+        (
+            sacramentType: SacramentType,
+            refetchFn: () => Promise<unknown> | unknown,
+        ) => {
+            sacramentRefetchMapRef.current[sacramentType] = refetchFn;
+        },
+        [],
+    );
+
+    const triggerSacramentRefetch = useCallback((sacramentType: SacramentType) => {
+        const refetchFn = sacramentRefetchMapRef.current[sacramentType];
+        if (refetchFn) {
+            // Fire-and-forget; react-query handles updating list UI.
+            void refetchFn();
+        }
+    }, []);
+
     const value: ArchiveDialogsContextType = useMemo(
         () => ({
             createSacrament: {
@@ -162,6 +192,8 @@ export const ArchiveDialogsProvider = ({
                 isOpen: state.createParishOpen,
                 onOpenChange: onCreateParishOpenChange,
             },
+            registerSacramentRefetch,
+            triggerSacramentRefetch,
         }),
         [
             state.createSacramentOpen,
@@ -170,6 +202,8 @@ export const ArchiveDialogsProvider = ({
             state.editSacramentOpen,
             state.editSacramentType,
             state.editSacramentInitialValues,
+            registerSacramentRefetch,
+            triggerSacramentRefetch,
         ],
     );
 
