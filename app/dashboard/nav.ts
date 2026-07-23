@@ -1,6 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import {
   Archive,
+  BookOpen,
   Bot,
   Boxes,
   Gamepad2,
@@ -18,6 +19,7 @@ export type DashboardNavItem = {
 export const DASHBOARD_NAV: DashboardNavItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { label: "Archive", href: "/dashboard/archive", icon: Archive },
+  { label: "Readings", href: "/dashboard/readings", icon: BookOpen },
   { label: "Chatbot", href: "/dashboard/chatbot", icon: Bot },
   // { label: "Meme School", href: "/dashboard/meme-school", icon: Boxes },
   // { label: "Community", href: "/dashboard/community", icon: Users },
