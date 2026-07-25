@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Phone, Mail } from "lucide-react"; // Ensure you have lucide-react installed
 
 export default function Footer() {
@@ -78,7 +79,20 @@ export default function Footer() {
 
         {/* Bottom Separator Line */}
         <div className="border-t border-gray-800 w-full h-px"></div>
-        
+
+        {/* Legal Links */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pt-6 text-sm text-gray-400">
+            <p>&copy; {new Date().getFullYear()} Unum Sint. All rights reserved.</p>
+            <nav className="flex flex-wrap gap-x-6 gap-y-2">
+                <Link href="/privacy-policy" className="hover:text-white transition-colors">
+                    Privacy Policy
+                </Link>
+                <Link href="/delete-account" className="hover:text-white transition-colors">
+                    Delete Account
+                </Link>
+            </nav>
+        </div>
+
       </div>
     </footer>
   );
