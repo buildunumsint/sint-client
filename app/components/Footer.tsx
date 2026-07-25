@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Phone, Mail } from "lucide-react"; // Ensure you have lucide-react installed
 
 export default function Footer() {
@@ -22,7 +23,7 @@ export default function Footer() {
                             className="object-contain p-0.5"
                          />
                     </div>
-                    <span className="text-sm font-medium text-gray-200">Unum Sint</span>
+                    <span className="text-sm font-medium text-gray-2">Unum Sint</span>
                 </div>
 
                 {/* Diocese Logo Section */}
@@ -36,7 +37,7 @@ export default function Footer() {
                             className="object-contain p-0.5"
                          />
                     </div>
-                    <span className="text-sm font-medium text-gray-200">Catholic Diocese of Port Harcourt</span>
+                    <span className="text-sm font-medium text-gray-2">Catholic Diocese of Port Harcourt</span>
                 </div>
             </div>
 
@@ -67,7 +68,7 @@ export default function Footer() {
 
             {/* Column 3: Quote (Aligned right on desktop) */}
             <div className="md:text-right pt-2 md:pt-0">
-                <p className="italic text-gray-200 text-base mb-1">
+                <p className="italic text-gray-2 text-base mb-1">
                     'Ut omnes unum sint'
                 </p>
                 <p className="text-gray-400 text-sm">
@@ -78,7 +79,20 @@ export default function Footer() {
 
         {/* Bottom Separator Line */}
         <div className="border-t border-gray-800 w-full h-px"></div>
-        
+
+        {/* Legal Links */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pt-6 text-sm text-gray-400">
+            <p>&copy; {new Date().getFullYear()} Unum Sint. All rights reserved.</p>
+            <nav className="flex flex-wrap gap-x-6 gap-y-2">
+                <Link href="/privacy-policy" className="hover:text-white transition-colors">
+                    Privacy Policy
+                </Link>
+                <Link href="/delete-account" className="hover:text-white transition-colors">
+                    Delete Account
+                </Link>
+            </nav>
+        </div>
+
       </div>
     </footer>
   );

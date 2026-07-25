@@ -71,7 +71,7 @@ export default function Navbar() {
       {/* --- MOBILE MENU DROPDOWN --- */}
       {/* Only renders when isMenuOpen is true */}
       {isMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-100" id="mobile-menu">
+        <div className="md:hidden bg-white border-t border-gray-1" id="mobile-menu">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col">
             <a href="#home" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-900 hover:bg-gray-50">Home</a>
             <a href="#about" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-900 hover:bg-gray-50">About</a>

@@ -20,6 +20,26 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Authentication
+
+Routes:
+
+- `/login`: Google login screen
+
+### Environment variables
+
+Create a `.env.local` and set:
+
+- `NEXT_PUBLIC_API_BASE_URL`: Backend base URL (required). Client redirects to `${NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/login/google`.
+
+### Google login flow
+
+Client does not obtain an ID token. It redirects the browser to:
+
+- `GET ${NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/login/google`
+
+Your backend should handle the Google OAuth flow and redirect back to the client app after login.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
