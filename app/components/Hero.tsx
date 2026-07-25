@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -18,15 +19,11 @@ export default function Hero() {
         </p>
 
         {/* Row 3: Button */}
-        <a
-          href="https://docs.google.com/forms/d/e/1FAIpQLSftpGWQpKe5rfDc06GMOwbAvWED6lCp4UGWaTJouUHYU5EYIw/viewform"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <Link href="/auth/login?returnTo=/dashboard">
           <button className="w-full sm:w-auto bg-[#1a0b2e] text-white px-10 py-4 rounded-lg font-medium shadow-[0_4px_20px_-2px_rgba(126,34,206,0.5)] hover:shadow-[0_4px_25px_-2px_rgba(126,34,206,0.6)] hover:scale-105 transition-all duration-300">
-            Join waitlist now
+            Go to dashboard
           </button>
-        </a>
+        </Link>
       </div>
 
       {/* Column 2: Logo / Image */}

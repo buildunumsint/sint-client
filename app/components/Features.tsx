@@ -59,10 +59,10 @@ export default function Features() {
           {featureList.map((feature, index) => (
             <div 
               key={index} 
-              className="bg-white rounded-2xl border border-gray-100 shadow-[0_4px_20px_-12px_rgba(0,0,0,0.1)] hover:shadow-xl transition-shadow duration-300 w-full md:max-w-[350px] flex flex-col overflow-hidden"
+              className="bg-white rounded-2xl border border-gray-1 shadow-[0_4px_20px_-12px_rgba(0,0,0,0.1)] hover:shadow-xl transition-shadow duration-300 w-full md:max-w-[350px] flex flex-col overflow-hidden"
             >
               {/* Image Area */}
-              <div className="relative h-52 w-full bg-gray-200">
+              <div className="relative h-52 w-full bg-gray-2">
                 <Image
                   src={feature.imageSrc}
                   alt={feature.title}
