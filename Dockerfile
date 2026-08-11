@@ -21,8 +21,8 @@ RUN yarn install --frozen-lockfile
 
 # Build application
 FROM deps AS build
-ARG NEXT_PUBLIC_API_BASE_URL
-ENV NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL
+# ARG NEXT_PUBLIC_API_BASE_URL
+# ENV NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL
 COPY . .
 ENV NODE_ENV=production
 RUN yarn build
@@ -37,5 +37,11 @@ COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/package.json ./package.json
 COPY --from=build /app/next.config.ts ./next.config.ts
 
+ENV PORT=8080
+ENV HOSTNAME=0.0.0.0
+
 EXPOSE 8080
-CMD [ "yarn", "start" ]
+CMD [ "yarn", "start", "-H", "0.0.0.0", "-p", "8080" ]
+
+
+

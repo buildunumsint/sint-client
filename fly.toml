@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for sint-client-dev on 2026-03-07T20:18:12Z
+# fly.toml app configuration file generated for sint-client on 2025-12-27T05:24:16Z
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -13,7 +13,7 @@ primary_region = 'jnb'
     NEXT_PUBLIC_API_BASE_URL = "https://sint-server-dev.fly.dev"
 
 [http_service]
-  internal_port = 3000
+  internal_port = 8080
   force_https = true
   auto_stop_machines = 'stop'
   auto_start_machines = true

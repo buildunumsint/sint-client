@@ -6,6 +6,7 @@ import {
   Boxes,
   Gamepad2,
   LayoutDashboard,
+  ScrollText,
   Settings,
   Users,
 } from "lucide-react";
@@ -20,6 +21,11 @@ export const DASHBOARD_NAV: DashboardNavItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { label: "Archive", href: "/dashboard/archive", icon: Archive },
   { label: "Readings", href: "/dashboard/readings", icon: BookOpen },
+  {
+    label: "Pastoral Letters",
+    href: "/dashboard/pastoral-letters",
+    icon: ScrollText,
+  },
   { label: "Chatbot", href: "/dashboard/chatbot", icon: Bot },
   // { label: "Meme School", href: "/dashboard/meme-school", icon: Boxes },
   // { label: "Community", href: "/dashboard/community", icon: Users },

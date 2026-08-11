@@ -1,8 +1,0 @@
-<App>
-    <NavBar/>
-    <Hero/>
-    <Image/>
-    <AboutUs/>
-    <Features/>
-    <Footer/>
-<App/>

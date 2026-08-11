@@ -67,37 +67,38 @@ export default function PrivacyPolicyPage() {
                 profile photo.
               </p>
             </div>
+            {/* TODO(analytics): PostHog is not integrated yet, so we do not
+                collect interaction events, device identifiers, or crash reports.
+                When PostHog is added, restore that disclosure here (a "Device
+                Information" subsection) AND declare it in the Google Play Data
+                Safety form so the two stay consistent. */}
             <div>
               <SubHeading>1.2 Usage Data</SubHeading>
               <p className="mt-2">
-                We collect Usage Data such as log files, IP address, browser
-                type, device identifiers, time zone, language settings,
-                referring URLs, and interaction events (feature use, clicks,
-                scrolls), as well as crash reports.
+                When you use the Service, our servers automatically record basic
+                technical log data such as your IP address and the date and time
+                of your requests. We use this to operate and secure the Service.
+                We do not currently use analytics or crash-reporting tools.
               </p>
             </div>
             <div>
-              <SubHeading>1.3 Device Information</SubHeading>
+              <SubHeading>1.3 Sacramental &amp; Parish Records</SubHeading>
               <p className="mt-2">
-                We collect information from and about the devices you use to
-                access the Service, including device identifiers, browser type,
-                operating system, and IP address.
-              </p>
-            </div>
-            <div>
-              <SubHeading>1.4 Sacramental &amp; Parish Records</SubHeading>
-              <p className="mt-2">
-                Unum Sint helps Catholic parishes and dioceses maintain
-                sacramental records — baptisms, first communions, confirmations,
-                holy orders, and marriages — along with parish membership and
-                role information. Because these records concern participation in
-                the sacraments, they may reveal information about your religious
-                beliefs, which is treated as a special category of personal
-                data. Some of this information is entered by parish staff on
-                your behalf, or provided by you during onboarding. Where the law
-                requires it, we rely on your explicit consent, or on the
-                legitimate activities of a religious body with respect to its
-                members, as the basis for processing this data.
+                Unum Sint is a service for members of the Catholic Church, so
+                using it necessarily involves information about your faith. We
+                and the parishes we serve maintain sacramental records —
+                baptisms, first communions, confirmations, holy orders, and
+                marriages — together with parish membership and role information.
+                This information reveals your religious beliefs and is therefore
+                a <span className="font-medium">special category</span> of
+                personal data that receives additional protection under
+                data-protection law. Some of it is provided by you during
+                onboarding, and some is entered by authorized parish staff on
+                your behalf. We process it on the basis of your membership of,
+                and relationship with, the Church — the legitimate activities of
+                a religious body in respect of its members — and, where the law
+                requires it, your explicit consent, which you may withdraw at any
+                time.
               </p>
             </div>
           </Section>
@@ -130,12 +131,14 @@ export default function PrivacyPolicyPage() {
                 .
               </p>
             </div>
+            {/* TODO(analytics): When PostHog is added, restore analytics and
+                product-development purposes here and mirror them in the Data
+                Safety form. */}
             <div>
-              <SubHeading>2.3 Improvement and Analytics</SubHeading>
+              <SubHeading>2.3 Security and Fraud Prevention</SubHeading>
               <p className="mt-2">
-                We use usage and device data for service analytics, product
-                development, and fraud prevention, based on our legitimate
-                interests or your consent where required.
+                We use technical log data to help secure the Service and to
+                prevent fraud and abuse, based on our legitimate interests.
               </p>
             </div>
           </Section>
