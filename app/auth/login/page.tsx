@@ -28,7 +28,7 @@ export default function LoginPage() {
     mutationKey: ["login"],
     mutationFn: (data: LoginData) => apiClient.post("/auth/login", data),
     onSuccess: (data) => {
-      console.log(data);
+      //console.log(data);
       if (!data?.status || !data?.data) {
         toast.error(data?.message.length > 100 ? "Unable to login. Please try again." : data?.message);
         return;

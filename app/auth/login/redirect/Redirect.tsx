@@ -58,7 +58,7 @@ const Redirect = () => {
   }, [searchParams]);
 
   useEffect(() => {
-    console.log("has Run Ref", hasRunRef.current);
+    //console.log("has Run Ref", hasRunRef.current);
     if (hasRunRef.current) return;
 
     // If the backend indicates failure, bounce back to login.
@@ -69,7 +69,7 @@ const Redirect = () => {
     }
 
     // Only set auth data if we have at least the session/token core.
-    console.log("parsed", parsed);
+    //console.log("parsed", parsed);
     if (!parsed.sessionId || !parsed.accessToken) return;
 
     updateValues({
