@@ -117,7 +117,7 @@ const BaptismForm = ({ formType, initialValues }: BaptismFormProps) => {
         },
         onSuccess: (data) => {
             if (data.status) {
-                console.log(data);
+                //console.log(data);
                 toastArchiveSuccess("A new baptism has been uploaded");
                 triggerSacramentRefetch("baptism");
                 createSacrament.onOpenChange(false);
@@ -126,7 +126,7 @@ const BaptismForm = ({ formType, initialValues }: BaptismFormProps) => {
             toast.error("Failed to create sacrament");
         },
         onError: (error) => {
-            console.log(error);
+            //console.log(error);
             toast.error("Failed to create sacrament");
         },
     });
@@ -138,7 +138,7 @@ const BaptismForm = ({ formType, initialValues }: BaptismFormProps) => {
         },
         onSuccess: (data) => {
             if (data.status) {
-                console.log(data);
+                //console.log(data);
                 toastArchiveSuccess("Baptism has been updated");
                 triggerSacramentRefetch("baptism");
                 editSacrament.onOpenChange(false);
@@ -147,7 +147,7 @@ const BaptismForm = ({ formType, initialValues }: BaptismFormProps) => {
             toast.error("Failed to update sacrament");
         },
         onError: (error) => {
-            console.log(error);
+            //console.log(error);
             toast.error("Failed to update sacrament");
         },
     });
