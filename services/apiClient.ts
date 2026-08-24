@@ -267,7 +267,7 @@ export function createApiClient(type: ContentType = "json"): ApiClient {
           sensitive ? `/api/sensitive${url}` : url,
           data,
         );
-        console.log("apiClient response", response);
+        //console.log("apiClient response", response);
         if (response.data?.success === true) {
           return successResponse(
             response?.data?.message,
@@ -280,7 +280,7 @@ export function createApiClient(type: ContentType = "json"): ApiClient {
           response?.data,
         );
       } catch (error) {
-        console.log("apiClient error", error);
+        //console.log("apiClient error", error);
         return catchError(error);
       }
     },

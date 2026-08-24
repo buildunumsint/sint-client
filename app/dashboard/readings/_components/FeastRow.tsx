@@ -123,7 +123,7 @@ export function FeastRow({ day, selected, isToday, onSelect }: FeastRowProps) {
             </span>
           ) : null}
         </div>
-        <p className="mt-1.5 line-clamp-2 text-[15px] font-semibold text-zinc-900">
+        <p className="mt-1.5 line-clamp-2 text-sm font-semibold text-zinc-900">
           {day.celebration}
         </p>
       </div>
