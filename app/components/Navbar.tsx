@@ -4,6 +4,16 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+// Anchors are absolute so the links also work from /about, /privacy-policy
+// and /delete-account, where this navbar is reused.
+const NAV_LINKS = [
+  { href: "/#home", label: "Home" },
+  { href: "/about", label: "About" },
+  { href: "/#features", label: "Features" },
+  { href: "/#goal", label: "Goal" },
+  { href: "/#contact", label: "Contact" },
+];
+
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -21,12 +31,10 @@ export default function Navbar() {
           </div>
 
           {/* --- CENTER: Desktop Nav (Hidden on Mobile) --- */}
-          <nav className="hidden md:flex space-x-8">
-            <a href="#home" className="text-gray-700 hover:text-purple-900 transition">Home</a>
-            <a href="#about" className="text-gray-700 hover:text-purple-900 transition">About</a>
-            <a href="#features" className="text-gray-700 hover:text-purple-900 transition">Features</a>
-            <a href="#goal" className="text-gray-700 hover:text-purple-900 transition">Goal</a>
-            <a href="#contact" className="text-gray-700 hover:text-purple-900 transition">Contact</a>
+          <nav className="hidden md:flex space-x-6">
+            {NAV_LINKS.map(({ href, label }) => (
+              <a key={href} href={href} className="text-gray-700 hover:text-purple-900 transition">{label}</a>
+            ))}
           </nav>
 
           {/* --- RIGHT: Desktop Action Button (Hidden on Mobile) --- */}
@@ -73,11 +81,16 @@ export default function Navbar() {
       {isMenuOpen && (
         <div className="md:hidden bg-white border-t border-gray-1" id="mobile-menu">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col">
-            <a href="#home" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-900 hover:bg-gray-50">Home</a>
-            <a href="#about" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-900 hover:bg-gray-50">About</a>
-            <a href="#features" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-900 hover:bg-gray-50">Features</a>
-            <a href="#goal" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-900 hover:bg-gray-50">Goal</a>
-            <a href="#contact" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-900 hover:bg-gray-50">Contact</a>
+            {NAV_LINKS.map(({ href, label }) => (
+              <a
+                key={href}
+                href={href}
+                onClick={() => setIsMenuOpen(false)}
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-900 hover:bg-gray-50"
+              >
+                {label}
+              </a>
+            ))}
 
             {/* Mobile Action Button */}
             <div className="mt-4 px-3">
