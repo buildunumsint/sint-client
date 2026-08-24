@@ -15,12 +15,19 @@ const geistMono = Geist_Mono({
 
 export const OG_IMAGE_DEFAULT = "https://unumsint.com/Diocese_Logo.png";
 
-const OG_SITE_NAME = "";
-const OG_TITLE = "";
+const OG_SITE_NAME = "Unum Sint";
+const OG_TITLE =
+  "Unum Sint — Digital platform for the Catholic Diocese of Port Harcourt";
 const OG_DESCRIPTION =
-  "";
-const OG_URL = "";
-const META_KEYWORDS = [   ""
+  "Unum Sint is the official digital platform of the Catholic Diocese of Port Harcourt. It connects parishes in one place: a secure sacramental records archive for parish and diocesan staff, diocesan-approved catechesis, parish announcements and community, and an AI faith companion. Available on the web and as a mobile app.";
+export const OG_URL = "https://unumsint.com";
+const META_KEYWORDS = [
+  "Unum Sint",
+  "Catholic Diocese of Port Harcourt",
+  "parish management",
+  "sacramental records",
+  "catechesis",
+  "Catholic app",
 ];
 
 const OG_IMAGES_DEFAULT = [
@@ -45,9 +52,13 @@ const OG_IMAGES_DEFAULT = [
 ];
 
 export const metadata: Metadata = {
+  metadataBase: new URL(OG_URL),
   title: OG_TITLE,
   description: OG_DESCRIPTION,
   keywords: META_KEYWORDS,
+  applicationName: OG_SITE_NAME,
+  alternates: { canonical: "/" },
+  robots: { index: true, follow: true },
   openGraph: {
     title: OG_TITLE,
     description: OG_DESCRIPTION,

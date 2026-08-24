@@ -84,6 +84,9 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pt-6 text-sm text-gray-400">
             <p>&copy; {new Date().getFullYear()} Unum Sint. All rights reserved.</p>
             <nav className="flex flex-wrap gap-x-6 gap-y-2">
+                <Link href="/about" className="hover:text-white transition-colors">
+                    About Unum Sint
+                </Link>
                 <Link href="/privacy-policy" className="hover:text-white transition-colors">
                     Privacy Policy
                 </Link>
