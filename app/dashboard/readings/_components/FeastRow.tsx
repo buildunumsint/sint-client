@@ -82,6 +82,7 @@ export function FeastRow({ day, selected, isToday, onSelect }: FeastRowProps) {
   const d = parseISO(day.date);
   const tag = dayTag(day);
   const hasReadings = day.hasReadings;
+  const hasReflection = day.hasReflection;
 
   return (
     <button
@@ -120,6 +121,11 @@ export function FeastRow({ day, selected, isToday, onSelect }: FeastRowProps) {
           {hasReadings ? (
             <span className="inline-flex items-center rounded-md bg-sint-green/10 px-2 py-[3px] text-[10px] font-bold uppercase tracking-wide text-sint-green">
               Readings set
+            </span>
+          ) : null}
+          {hasReflection ? (
+            <span className="inline-flex items-center rounded-md bg-amber-100 px-2 py-[3px] text-[10px] font-bold uppercase tracking-wide text-amber-700">
+              Reflection
             </span>
           ) : null}
         </div>

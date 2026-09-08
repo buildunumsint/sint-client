@@ -263,6 +263,10 @@ function SelectedDayPanel({
               label="Readings"
               value={day.hasReadings ? "Uploaded" : "None yet"}
             />
+            <Meta
+              label="Reflection"
+              value={day.hasReflection ? "Uploaded" : "None yet"}
+            />
           </dl>
 
           {day.saint ? (

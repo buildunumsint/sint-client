@@ -77,4 +77,5 @@ export interface LiturgicalDaySummary {
   note?: string | null;
   yearCycle: "A" | "B" | "C";
   hasReadings: boolean;
+  hasReflection: boolean;
 }
