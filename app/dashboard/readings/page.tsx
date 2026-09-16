@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { format, parseISO } from "date-fns";
-import { CalendarDays, Info, PenLine } from "lucide-react";
+import { CalendarDays, CalendarPlus, Info, PenLine } from "lucide-react";
 
 import {
   Select,
@@ -30,6 +30,7 @@ function daysInMonth(year: number, month1: number) {
 }
 
 export default function ReadingsPage() {
+  const router = useRouter();
   const now = new Date();
   const today = format(now, "yyyy-MM-dd");
 
@@ -98,13 +99,22 @@ export default function ReadingsPage() {
   return (
     <div className="flex w-full flex-col gap-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight text-zinc-900">
-          Liturgical Readings
-        </h1>
-        <p className="mt-1 text-sm text-gray-text-4">
-          Select a day from the calendar to manage its Mass readings.
-        </p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-zinc-900">
+            Liturgical Readings
+          </h1>
+          <p className="mt-1 text-sm text-gray-text-4">
+            Select a day from the calendar to manage its Mass readings.
+          </p>
+        </div>
+        <Button
+          variant="outline"
+          onClick={() => router.push("/dashboard/readings/seed")}
+        >
+          <CalendarPlus className="h-4 w-4" />
+          Seed calendar
+        </Button>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
@@ -201,7 +211,13 @@ export default function ReadingsPage() {
             ) : !days || days.length === 0 ? (
               <EmptyState
                 title="No days for this month"
-                body="The liturgical calendar hasn't been seeded yet. Run `make setupdb` (or `make seed`) on sint-server, then reload."
+                body="The liturgical calendar hasn't been seeded for this year yet."
+                action={
+                  <Button onClick={() => router.push("/dashboard/readings/seed")}>
+                    <CalendarPlus className="h-4 w-4" />
+                    Seed calendar
+                  </Button>
+                }
               />
             ) : (
               <div

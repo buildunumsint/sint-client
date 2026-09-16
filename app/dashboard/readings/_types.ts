@@ -9,7 +9,8 @@ export type LiturgicalSeason =
   | "Christmas"
   | "Ordinary Time"
   | "Lent"
-  | "Easter";
+  | "Easter"
+  | "Easter Triduum";
 
 /** Rank of a celebration, highest → lowest. */
 export type FeastRank =
@@ -78,4 +79,41 @@ export interface LiturgicalDaySummary {
   yearCycle: "A" | "B" | "C";
   hasReadings: boolean;
   hasReflection: boolean;
+}
+
+/* ------------------------------------------------------------------ *
+ * Seed the calendar from LitCal (POST /internal/liturgy/seed/:year)
+ * ------------------------------------------------------------------ */
+
+/** LITURGICAL: Advent 1 of the prior year → Christ the King. CIVIL: Jan 1 → Dec 31. */
+export type LitCalYearType = "LITURGICAL" | "CIVIL";
+
+/** When Epiphany is observed. */
+export type LitCalEpiphany = "JAN6" | "SUNDAY_JAN2_JAN8";
+
+/** When Ascension / Corpus Christi are observed. */
+export type LitCalObservance = "THURSDAY" | "SUNDAY";
+
+export interface SeedLiturgyRequest {
+  year_type: LitCalYearType;
+  epiphany: LitCalEpiphany;
+  ascension: LitCalObservance;
+  corpus_christi: LitCalObservance;
+  eternal_high_priest: boolean;
+  /**
+   * Refreshes calendar-derived columns on days that already exist. Note and
+   * Reflection (admin-authored) are never touched by a re-seed either way.
+   */
+  overwrite: boolean;
+}
+
+/** Response from a successful seed run. */
+export interface SeedLiturgyResult {
+  requested: number;
+  inserted: number;
+  updated: number;
+  skipped: number;
+  fromDate: string;
+  toDate: string;
+  warnings?: string[];
 }

@@ -27,6 +27,7 @@ const SEASON_TONE: Record<LiturgicalSeason, Tone> = {
   Lent: "violet",
   Christmas: "gold",
   Easter: "gold",
+  "Easter Triduum": "red",
   "Ordinary Time": "green",
 };
 
