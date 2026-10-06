@@ -342,7 +342,7 @@ export function AnnouncementForm({ mode, initial, saving, onSubmit }: Props) {
             Paragraphs are split on blank lines. A single line break stays inside
             the same paragraph.
             {values.type === "letter"
-              ? " The author is shown as the signature, so you don’t need to sign the body."
+              ? " The author’s name appears under the title; end the body with any sign-off you want shown."
               : ""}
           </p>
         </div>
