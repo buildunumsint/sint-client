@@ -1,11 +1,16 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { useAuthContext } from "@/context/AuthContext";
 import { createApiClientSecured } from "@/services/apiClient";
 
-import type { LiturgicalDay, LiturgicalDaySummary } from "../_types";
+import type {
+  LiturgicalDay,
+  LiturgicalDaySummary,
+  SeedLiturgyRequest,
+  SeedLiturgyResult,
+} from "../_types";
 
 /**
  * The backend stores `date` as a Postgres DATE. Defensively trim any stray time
@@ -53,5 +58,29 @@ export function useLiturgicalDay(date: string) {
       return normalizeDate(res.data as LiturgicalDay);
     },
     enabled: Boolean(date),
+  });
+}
+
+/**
+ * Fetches one year of the general Roman calendar from LitCal and
+ * seeds/refreshes `liturgical_days` from it.
+ * `POST /internal/liturgy/seed/:year` (super admin only).
+ */
+export function useSeedLiturgicalCalendar() {
+  const { access_token, updateAccessToken } = useAuthContext();
+  const apiClient = createApiClientSecured(access_token, updateAccessToken);
+
+  return useMutation({
+    mutationKey: ["liturgy", "seed"],
+    mutationFn: async ({
+      year,
+      ...body
+    }: SeedLiturgyRequest & { year: number }): Promise<SeedLiturgyResult> => {
+      const res = await apiClient.post(`/internal/liturgy/seed/${year}`, body);
+      if (!res.status) {
+        throw new Error(res.message || "Failed to seed liturgical calendar");
+      }
+      return res.data as SeedLiturgyResult;
+    },
   });
 }

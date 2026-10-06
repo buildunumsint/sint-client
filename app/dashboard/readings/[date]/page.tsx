@@ -79,7 +79,15 @@ export default function ReadingsEditorPage() {
       ) : isError || !day ? (
         <Notice
           title="Day not in the calendar"
-          body="This date hasn't been seeded yet. Run `make setupdb` (or `make seed`) on sint-server, then try again."
+          body="This date hasn't been seeded yet."
+          action={
+            <Button
+              className="mt-2"
+              onClick={() => router.push("/dashboard/readings/seed")}
+            >
+              Seed calendar
+            </Button>
+          }
         />
       ) : (
         <ReadingsEditor day={day} date={date} />
@@ -139,7 +147,7 @@ function ReadingsEditor({ day, date }: { day: LiturgicalDay; date: string }) {
         reflectionTitle.trim() || reflectionBody.trim()
           ? { title: reflectionTitle.trim(), body: reflectionBody.trim() }
           : null;
-      return apiClient.put(`/liturgy/day/${date}/readings`, {
+      return apiClient.put(`/internal/liturgy/day/${date}/readings`, {
         readings: buildReadings(),
         reflection,
       });
@@ -308,11 +316,20 @@ function Textarea({
   );
 }
 
-function Notice({ title, body }: { title: string; body: string }) {
+function Notice({
+  title,
+  body,
+  action,
+}: {
+  title: string;
+  body: string;
+  action?: React.ReactNode;
+}) {
   return (
     <div className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-gray-1 px-6 py-16 text-center">
       <p className="text-sm font-semibold text-zinc-900">{title}</p>
       <p className="max-w-md text-sm text-gray-text-4">{body}</p>
+      {action}
     </div>
   );
 }
