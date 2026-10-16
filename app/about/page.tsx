@@ -191,6 +191,16 @@ export default function AboutPage() {
             </div>
           </Section>
 
+          <Section id="scripture" title="Scripture">
+            <p>
+              Scripture quotations are from the Revised Standard Version of the
+              Bible&mdash;Second Catholic Edition (Ignatius Edition), copyright
+              &copy; 2006 National Council of the Churches of Christ in the
+              United States of America. Used by permission. All rights
+              reserved.
+            </p>
+          </Section>
+
           <Section id="contact" title="Contact us">
             <p>
               Write to us at{" "}
