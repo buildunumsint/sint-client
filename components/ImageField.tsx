@@ -6,10 +6,33 @@ import { ImagePlus, RefreshCw, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-import { BANNER } from "../_types";
+/**
+ * What an image slot expects, and why. The server enforces only type and size
+ * (see `api/media` in sint-server); the dimension guidance is advisory and
+ * checked here, since a small or oddly-shaped image still works — it's just
+ * soft or cropped.
+ */
+export type ImageSpec = {
+  /** Lowercase name used in the copy: "banner", "image". */
+  noun: string;
+  maxBytes: number;
+  mimeTypes: readonly string[];
+  /** Sharp on every phone: the frame at 3x. */
+  recommended: { readonly width: number; readonly height: number };
+  /** The floor before it looks soft: the frame at 2x. */
+  minimum: { readonly width: number; readonly height: number };
+  /** The design frame, in points. Its aspect ratio drives the preview and the crop warning. */
+  frame: { readonly width: number; readonly height: number };
+  /** The frame's ratio as an admin would say it, e.g. "39:32". */
+  ratioLabel: string;
+  /** Where the recommended size comes from, e.g. "the app’s 390 × 320 frame at 3×". */
+  recommendedNote: string;
+  /** Composition advice: what to keep clear of the crop. */
+  cropNote: string;
+};
 
-export type BannerValue = {
-  /** The stored banner's URL, or "" for none. */
+export type ImageValue = {
+  /** The stored image's URL, or "" for none. */
   url: string;
   /** A newly picked file, uploaded on submit. Takes precedence over `url`. */
   file: File | null;
@@ -18,27 +41,33 @@ export type BannerValue = {
 type Dimensions = { width: number; height: number };
 
 type Props = {
-  value: BannerValue;
-  onChange: (next: BannerValue) => void;
+  spec: ImageSpec;
+  value: ImageValue;
+  onChange: (next: ImageValue) => void;
   disabled?: boolean;
 };
 
 const MB = 1024 * 1024;
-const ASPECT = BANNER.frame.width / BANNER.frame.height;
 
 /**
- * Picks, previews and checks a banner before upload.
+ * Picks, previews and checks an image before upload.
  *
- * The preview is drawn at the design's real size (390×320 CSS px ≈ the
- * phone's 390×320pt frame) with `object-cover`, so the admin sees exactly
- * the crop parishioners will. Type and size are hard limits (the server
- * rejects them anyway); low resolution and an off aspect ratio are warnings,
- * since the image still works — it's just soft or cropped.
+ * The preview is drawn at the design's real size with `object-cover`, so the
+ * admin sees the crop parishioners will. Type and size are hard limits (the
+ * server rejects them anyway); low resolution and an off aspect ratio are
+ * warnings.
+ *
+ * Nothing is uploaded here. The picked file rides in `value.file` and the
+ * form uploads it on submit, so an abandoned form leaves nothing in R2.
  */
-export function BannerField({ value, onChange, disabled }: Props) {
+export function ImageField({ spec, value, onChange, disabled }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string | null>(null);
   const [dims, setDims] = useState<Dimensions | null>(null);
+
+  const aspect = spec.frame.width / spec.frame.height;
+  const maxMb = spec.maxBytes / MB;
+  const Noun = spec.noun.charAt(0).toUpperCase() + spec.noun.slice(1);
 
   const previewUrl = useMemo(
     () => (value.file ? URL.createObjectURL(value.file) : null),
@@ -58,13 +87,13 @@ export function BannerField({ value, onChange, disabled }: Props) {
     if (inputRef.current) inputRef.current.value = "";
     if (!file) return;
 
-    if (!(BANNER.mimeTypes as readonly string[]).includes(file.type)) {
+    if (!spec.mimeTypes.includes(file.type)) {
       setError("Use a JPEG, PNG or WebP image.");
       return;
     }
-    if (file.size > BANNER.maxBytes) {
+    if (file.size > spec.maxBytes) {
       setError(
-        `That image is ${(file.size / MB).toFixed(1)} MB — the limit is 2 MB. Export it at ${BANNER.recommended.width}×${BANNER.recommended.height} or compress it.`,
+        `That image is ${(file.size / MB).toFixed(1)} MB — the limit is ${maxMb} MB. Export it at ${spec.recommended.width}×${spec.recommended.height} or compress it.`,
       );
       return;
     }
@@ -81,23 +110,26 @@ export function BannerField({ value, onChange, disabled }: Props) {
     onChange({ url: "", file: null });
   };
 
-  const warnings = dims ? dimensionWarnings(dims) : [];
+  const warnings = dims ? dimensionWarnings(dims, spec, aspect) : [];
 
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-wrap items-start gap-5">
         <div
           className={cn(
-            "relative flex w-full max-w-[390px] items-center justify-center overflow-hidden rounded-2xl border bg-zinc-50",
+            "relative flex w-full items-center justify-center overflow-hidden rounded-2xl border bg-zinc-50",
             src ? "border-gray-1" : "border-dashed border-gray-1",
           )}
-          style={{ aspectRatio: `${BANNER.frame.width} / ${BANNER.frame.height}` }}
+          style={{
+            maxWidth: spec.frame.width,
+            aspectRatio: `${spec.frame.width} / ${spec.frame.height}`,
+          }}
         >
           {src ? (
             // eslint-disable-next-line @next/next/no-img-element -- blob: previews and arbitrary R2 hosts; next/image would need remotePatterns for both
             <img
               src={src}
-              alt="Banner preview"
+              alt={`${Noun} preview`}
               className="h-full w-full object-cover"
             />
           ) : (
@@ -108,9 +140,9 @@ export function BannerField({ value, onChange, disabled }: Props) {
               className="flex h-full w-full flex-col items-center justify-center gap-2 text-gray-text-4 hover:text-zinc-900"
             >
               <ImagePlus className="h-6 w-6" />
-              <span className="text-sm font-medium">Add a banner</span>
+              <span className="text-sm font-medium">Add a {spec.noun}</span>
               <span className="text-xs">
-                {BANNER.recommended.width} × {BANNER.recommended.height} px
+                {spec.recommended.width} × {spec.recommended.height} px
               </span>
             </button>
           )}
@@ -120,19 +152,18 @@ export function BannerField({ value, onChange, disabled }: Props) {
           <ul className="flex flex-col gap-1 text-xs text-gray-text-4">
             <li>
               <span className="font-semibold text-zinc-700">
-                {BANNER.recommended.width} × {BANNER.recommended.height} px
+                {spec.recommended.width} × {spec.recommended.height} px
               </span>{" "}
-              recommended (39:32 — the app’s 390 × 320 frame at 3×)
+              recommended ({spec.ratioLabel} — {spec.recommendedNote})
             </li>
             <li>
-              At least {BANNER.minimum.width} × {BANNER.minimum.height} px, or
-              it will look soft on most phones
+              At least {spec.minimum.width} × {spec.minimum.height} px, or it
+              will look soft on most phones
             </li>
-            <li>JPEG, PNG or WebP · up to 2 MB (JPEG/WebP usually ~200 KB)</li>
             <li>
-              Keep text and faces near the centre — the home feed shows a square
-              crop
+              JPEG, PNG or WebP · up to {maxMb} MB (JPEG/WebP usually ~200 KB)
             </li>
+            <li>{spec.cropNote}</li>
           </ul>
 
           <div className="flex flex-wrap gap-2">
@@ -187,7 +218,7 @@ export function BannerField({ value, onChange, disabled }: Props) {
       <input
         ref={inputRef}
         type="file"
-        accept={BANNER.mimeTypes.join(",")}
+        accept={spec.mimeTypes.join(",")}
         className="hidden"
         onChange={(e) => pick(e.target.files?.[0])}
       />
@@ -213,19 +244,23 @@ function readDimensions(file: File): Promise<Dimensions | null> {
     .catch(() => null);
 }
 
-function dimensionWarnings({ width, height }: Dimensions): string[] {
+function dimensionWarnings(
+  { width, height }: Dimensions,
+  spec: ImageSpec,
+  aspect: number,
+): string[] {
   const out: string[] = [];
-  if (width < BANNER.minimum.width || height < BANNER.minimum.height) {
+  if (width < spec.minimum.width || height < spec.minimum.height) {
     out.push(
-      `This image is ${width} × ${height} px — below ${BANNER.minimum.width} × ${BANNER.minimum.height}, so it will look blurry on most phones.`,
+      `This image is ${width} × ${height} px — below ${spec.minimum.width} × ${spec.minimum.height}, so it will look blurry on most phones.`,
     );
   }
-  // More than ~10% off 39:32 means a visible crop on one axis.
+  // More than ~10% off the frame's ratio means a visible crop on one axis.
   const ratio = width / height;
-  if (Math.abs(ratio - ASPECT) / ASPECT > 0.1) {
-    const side = ratio > ASPECT ? "left and right" : "top and bottom";
+  if (Math.abs(ratio - aspect) / aspect > 0.1) {
+    const side = ratio > aspect ? "left and right" : "top and bottom";
     out.push(
-      `The image isn’t 39:32, so the app will crop its ${side} edges. Check the preview above.`,
+      `The image isn’t ${spec.ratioLabel}, so the app will crop its ${side} edges. Check the preview above.`,
     );
   }
   return out;

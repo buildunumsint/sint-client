@@ -3,8 +3,10 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AlertTriangle, Info, Save, Send } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { ImageField, type ImageValue } from "@/components/ImageField";
 import { Input } from "@/components/ui/input";
 import {
   Dialog,
@@ -23,7 +25,9 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 
+import { useUploadPastoralLetterImage } from "../_hooks/usePastoralLetters";
 import {
+  LETTER_IMAGE,
   LETTER_TYPE_OPTIONS,
   type CreateLetterPayload,
   type LetterType,
@@ -36,7 +40,7 @@ export type LetterFormValues = {
   authorName: string;
   letterType: LetterType;
   body: string;
-  imageUrl: string;
+  image: ImageValue;
 };
 
 const EMPTY: LetterFormValues = {
@@ -45,7 +49,7 @@ const EMPTY: LetterFormValues = {
   authorName: "",
   letterType: "pastoral",
   body: "",
-  imageUrl: "",
+  image: { url: "", file: null },
 };
 
 export function toFormValues(letter: PastoralLetter): LetterFormValues {
@@ -55,7 +59,7 @@ export function toFormValues(letter: PastoralLetter): LetterFormValues {
     authorName: letter.author.name,
     letterType: letter.letterType,
     body: letter.body,
-    imageUrl: letter.imageUrl ?? "",
+    image: { url: letter.imageUrl ?? "", file: null },
   };
 }
 
@@ -66,15 +70,21 @@ export function toFormValues(letter: PastoralLetter): LetterFormValues {
  * "leave untouched", while an empty string means "clear it". Sending null for
  * a cleared field would make the image URL unremovable. On create, the server
  * normalises an empty string to NULL.
+ *
+ * `imageUrl` is passed in rather than read from `v` because a newly picked
+ * file only has a URL once it has been uploaded.
  */
-export function toPayload(v: LetterFormValues): CreateLetterPayload {
+export function toPayload(
+  v: LetterFormValues,
+  imageUrl: string,
+): CreateLetterPayload {
   return {
     title: v.title.trim(),
     authorTitle: v.authorTitle.trim(),
     authorName: v.authorName.trim(),
     letterType: v.letterType,
     body: v.body.trim(),
-    imageUrl: v.imageUrl.trim(),
+    imageUrl: imageUrl.trim(),
   };
 }
 
@@ -87,6 +97,7 @@ type Props = {
 
 export function LetterForm({ mode, initial, saving, onSubmit }: Props) {
   const router = useRouter();
+  const uploadMut = useUploadPastoralLetterImage();
   const [values, setValues] = useState<LetterFormValues>(() =>
     initial ? toFormValues(initial) : EMPTY,
   );
@@ -115,6 +126,26 @@ export function LetterForm({ mode, initial, saving, onSubmit }: Props) {
   }, [values]);
 
   const valid = Object.keys(errors).length === 0;
+  const busy = saving || uploadMut.isPending;
+
+  // Uploads a newly picked image, then hands the payload up. It runs only
+  // after any confirmation, so backing out of "Publish and notify" never
+  // leaves an orphaned upload in R2.
+  const submit = async () => {
+    let imageUrl = values.image.url;
+    if (values.image.file) {
+      try {
+        imageUrl = await uploadMut.mutateAsync(values.image.file);
+      } catch (e) {
+        toast.error(e instanceof Error ? e.message : "Failed to upload image");
+        return;
+      }
+      // Keep the uploaded URL so a retry after a failed save doesn't upload
+      // (and orphan) the same image again.
+      set("image", { url: imageUrl, file: null });
+    }
+    onSubmit(toPayload(values, imageUrl));
+  };
 
   const attemptSubmit = () => {
     setTouched(true);
@@ -125,7 +156,7 @@ export function LetterForm({ mode, initial, saving, onSubmit }: Props) {
       setConfirmOpen(true);
       return;
     }
-    onSubmit(toPayload(values));
+    void submit();
   };
 
   const err = (key: keyof LetterFormValues) =>
@@ -204,12 +235,19 @@ export function LetterForm({ mode, initial, saving, onSubmit }: Props) {
               </SelectContent>
             </Select>
           </div>
+        </div>
+      </section>
 
-          <Input
-            label="Image URL (optional)"
-            value={values.imageUrl}
-            onChange={(e) => set("imageUrl", e.target.value)}
-            placeholder="https://…"
+      <section className="rounded-2xl border border-gray-1 bg-white p-5 shadow-sm">
+        <h3 className="text-base font-semibold text-zinc-900">
+          Image <span className="font-normal text-gray-text-4">(optional)</span>
+        </h3>
+        <div className="mt-4">
+          <ImageField
+            spec={LETTER_IMAGE}
+            value={values.image}
+            onChange={(image) => set("image", image)}
+            disabled={busy}
           />
         </div>
       </section>
@@ -246,11 +284,11 @@ export function LetterForm({ mode, initial, saving, onSubmit }: Props) {
           variant="outline"
           size="xl"
           onClick={() => router.push("/dashboard/pastoral-letters")}
-          disabled={saving}
+          disabled={busy}
         >
           Cancel
         </Button>
-        <Button size="xl" loading={saving} onClick={attemptSubmit}>
+        <Button size="xl" loading={busy} onClick={attemptSubmit}>
           {mode === "create" ? (
             <>
               <Send className="h-4 w-4" />
@@ -283,16 +321,16 @@ export function LetterForm({ mode, initial, saving, onSubmit }: Props) {
               variant="outline"
               size="xl"
               onClick={() => setConfirmOpen(false)}
-              disabled={saving}
+              disabled={busy}
             >
               Go back
             </Button>
             <Button
               size="xl"
-              loading={saving}
+              loading={busy}
               onClick={() => {
                 setConfirmOpen(false);
-                onSubmit(toPayload(values));
+                void submit();
               }}
             >
               <Send className="h-4 w-4" />
