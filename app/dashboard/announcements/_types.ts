@@ -12,6 +12,8 @@
  * renders as the previous day west of Greenwich).
  */
 
+import type { ImageSpec } from "@/components/ImageField";
+
 export type AnnouncementType = "event" | "letter";
 
 export interface AnnouncementEvent {
@@ -86,11 +88,16 @@ export const ANNOUNCEMENT_TYPE_LABELS: Record<AnnouncementType, string> = {
  * floor before it looks soft. The server enforces only type and size; the
  * dimension guidance is advisory and checked here.
  */
-export const BANNER = {
+export const BANNER: ImageSpec = {
+  noun: "banner",
   maxBytes: 2 * 1024 * 1024,
   mimeTypes: ["image/jpeg", "image/png", "image/webp"],
   recommended: { width: 1170, height: 960 },
   minimum: { width: 780, height: 640 },
   /** Design frame, in points. */
   frame: { width: 390, height: 320 },
-} as const;
+  ratioLabel: "39:32",
+  recommendedNote: "the app’s 390 × 320 frame at 3×",
+  cropNote:
+    "Keep text and faces near the centre — the home feed shows a square crop",
+};

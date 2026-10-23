@@ -15,23 +15,24 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { ImageField, type ImageValue } from "@/components/ImageField";
 import { cn } from "@/lib/utils";
 
 import { formatEventDates } from "../_format";
 import { useUploadAnnouncementBanner } from "../_hooks/useAnnouncements";
 import {
   ANNOUNCEMENT_TYPE_LABELS,
+  BANNER,
   type Announcement,
   type AnnouncementType,
   type CreateAnnouncementPayload,
 } from "../_types";
-import { BannerField, type BannerValue } from "./BannerField";
 
 export type AnnouncementFormValues = {
   type: AnnouncementType;
   title: string;
   body: string;
-  banner: BannerValue;
+  banner: ImageValue;
   // Event
   dates: DateRange | undefined;
   startTime: string;
@@ -310,7 +311,8 @@ export function AnnouncementForm({ mode, initial, saving, onSubmit }: Props) {
           Banner <span className="font-normal text-gray-text-4">(optional)</span>
         </h3>
         <div className="mt-4">
-          <BannerField
+          <ImageField
+            spec={BANNER}
             value={values.banner}
             onChange={(b) => set("banner", b)}
             disabled={busy}

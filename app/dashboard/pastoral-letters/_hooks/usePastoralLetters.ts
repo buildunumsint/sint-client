@@ -125,3 +125,33 @@ export function useDeletePastoralLetter() {
     },
   });
 }
+
+/**
+ * Uploads a letter's image to R2 (via sint-server) and resolves to its public
+ * URL, which is then sent as `imageUrl` on create/update.
+ *
+ * Uses the "form" (multipart) client: the default JSON client would serialise
+ * the FormData to JSON. Axios drops the bare multipart Content-Type for
+ * FormData so the browser can add the boundary.
+ */
+export function useUploadPastoralLetterImage() {
+  const { access_token, updateAccessToken } = useAuthContext();
+  const apiClient = createApiClientSecured(
+    access_token,
+    updateAccessToken,
+    "form",
+  );
+
+  return useMutation({
+    mutationKey: ["upload-pastoral-letter-image"],
+    mutationFn: async (file: File): Promise<string> => {
+      const form = new FormData();
+      form.append("file", file);
+      const res = await apiClient.post("/pastoral-letters/image", form);
+      if (!res.status) {
+        throw new Error(res.message || "Failed to upload image");
+      }
+      return (res.data as { url: string }).url;
+    },
+  });
+}

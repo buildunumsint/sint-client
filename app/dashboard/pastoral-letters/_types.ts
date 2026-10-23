@@ -7,6 +7,8 @@
  * record later.
  */
 
+import type { ImageSpec } from "@/components/ImageField";
+
 export type LetterType = "pastoral" | "general";
 
 export interface LetterAuthor {
@@ -46,3 +48,22 @@ export const LETTER_TYPE_OPTIONS: { value: LetterType; label: string }[] = [
   { value: "pastoral", label: "Pastoral letter" },
   { value: "general", label: "General letter" },
 ];
+
+/**
+ * A letter's image is shown twice in the app, from the same file: as the
+ * Diocese tab's hero card (a 350×260pt frame on a 390pt phone — the preview
+ * here) and as a wide 147pt-tall strip on the letter's own page, cropped from
+ * the middle. The server enforces only type and size; the rest is advisory.
+ */
+export const LETTER_IMAGE: ImageSpec = {
+  noun: "image",
+  maxBytes: 2 * 1024 * 1024,
+  mimeTypes: ["image/jpeg", "image/png", "image/webp"],
+  recommended: { width: 1050, height: 780 },
+  minimum: { width: 700, height: 520 },
+  frame: { width: 350, height: 260 },
+  ratioLabel: "4:3",
+  recommendedNote: "the Diocese tab’s 350 × 260 card at 3×",
+  cropNote:
+    "Keep faces and text near the centre — the letter page crops it to a wide strip",
+};
