@@ -1,11 +1,17 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { useAuthContext } from "../AuthContext";
 import { createApiClientSecured } from "@/services/apiClient";
-import { useQuery } from "@tanstack/react-query";
-import { parseArray } from "@/lib/formatters";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+
+// Comparison windows the server accepts for ?days=.
+export const STATS_DAYS_OPTIONS = [7, 14, 30] as const;
+export type StatsDays = (typeof STATS_DAYS_OPTIONS)[number];
 
 export type StatsContextType = {
-  stats: StatsType
+  stats: StatsType;
+  deviceStats: DeviceStatsType;
+  days: StatsDays;
+  setDays: (days: StatsDays) => void;
 }
 
 const StatsContext = createContext<StatsContextType | undefined>(undefined);
@@ -18,36 +24,68 @@ export const useStatsContext = (): StatsContextType => {
   return ctx;
 };
 
-const INIT_VALUES: StatsContextType = {
-  stats: {
-    total_users: 0,
-    total_parishioners: 0,
-    total_priests: 0,
-    total_parish_admins: 0,
-  },
+const EMPTY_USER_COUNTS: UserStatsCounts = {
+  total_users: 0,
+  total_parishioners: 0,
+  total_priests: 0,
+  total_parish_admins: 0,
 };
 
+const INIT_STATS: StatsType = {
+  days: 7,
+  ...EMPTY_USER_COUNTS,
+  previous: EMPTY_USER_COUNTS,
+};
+
+const INIT_DEVICE_STATS: DeviceStatsType = {
+  days: 7,
+  verified_installs: 0,
+  previous_verified_installs: 0,
+  by_platform: { ios: 0, android: 0 },
+  active: 0,
+  signed_in: 0,
+};
 
 interface StatsContextProviderProps {
   children: React.ReactNode;
 }
 
 export const StatsContextProvider = ({ children }: StatsContextProviderProps) => {
-  const [stats, setStats] = useState<StatsType>(INIT_VALUES.stats);
+  const [days, setDays] = useState<StatsDays>(7);
   const { access_token, updateAccessToken } = useAuthContext();
 
   const apiClient = createApiClientSecured(access_token, updateAccessToken);
 
-  const { data, isFetching } = useQuery({
-    queryKey: ["stats"],
-    queryFn: () => apiClient.get("/users/statistics"),
+  // keepPreviousData holds the last period's numbers on screen while the
+  // newly selected period loads, instead of flashing back to zeros.
+  const { data: statsData } = useQuery({
+    queryKey: ["stats", days],
+    queryFn: () => apiClient.get(`/users/statistics?days=${days}`),
     enabled: !!access_token,
-  })
-  useEffect(() => {
-    if (data?.status && data?.data) {
-      setStats(data?.data as StatsType);
-    }
-  }, [data, isFetching]);
+    placeholderData: keepPreviousData,
+  });
+  const { data: deviceStatsData } = useQuery({
+    queryKey: ["device-stats", days],
+    queryFn: () => apiClient.get(`/devices/statistics?days=${days}`),
+    enabled: !!access_token,
+    placeholderData: keepPreviousData,
+  });
 
-  return <StatsContext.Provider value={{ stats }}>{children}</StatsContext.Provider>;
+  // Error responses (e.g. 403 for non-super_admins) leave the zeroed defaults.
+  // Spreading over them also keeps the cards rendering against a server that
+  // predates the `previous` field.
+  const stats: StatsType =
+    statsData?.status && statsData?.data
+      ? { ...INIT_STATS, ...statsData.data }
+      : INIT_STATS;
+  const deviceStats: DeviceStatsType =
+    deviceStatsData?.status && deviceStatsData?.data
+      ? { ...INIT_DEVICE_STATS, ...deviceStatsData.data }
+      : INIT_DEVICE_STATS;
+
+  return (
+    <StatsContext.Provider value={{ stats, deviceStats, days, setDays }}>
+      {children}
+    </StatsContext.Provider>
+  );
 };
