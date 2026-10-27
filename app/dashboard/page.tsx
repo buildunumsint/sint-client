@@ -1,47 +1,136 @@
 "use client";
 import { useAuthContext } from "@/context/AuthContext";
-import { useStatsContext } from "@/context/prefetch/StatsContext";
-import { CalendarDays, Filter, TrendingDown, TrendingUp } from "lucide-react";
+import {
+  STATS_DAYS_OPTIONS,
+  StatsDays,
+  useStatsContext,
+} from "@/context/prefetch/StatsContext";
+import {
+  CalendarDays,
+  Filter,
+  Minus,
+  Smartphone,
+  TrendingDown,
+  TrendingUp,
+} from "lucide-react";
 import Image from "next/image";
 import { Rect1, Rect2, Rect3 } from "./_shared/rectangles";
 import { MembersIconFilled } from "./_shared/icons/MembersIcon";
 
+type Delta = { tone: "up" | "down" | "flat"; label: string; detail: string };
+
+// Totals compare today's count with how many of those rows existed `days`
+// ago, so they only grow; "down" is kept for safety.
+function describeDelta(value: number, previous: number, days: number): Delta {
+  const change = value - previous;
+  const window = `in the last ${days} days`;
+  if (change === 0) return { tone: "flat", label: "No change", detail: window };
+
+  const count = `${change > 0 ? "+" : "-"}${Math.abs(change).toLocaleString()}`;
+  // A percentage from zero is meaningless, so show the raw count instead.
+  if (previous === 0) return { tone: "up", label: `${count} new`, detail: window };
+
+  const percent = (Math.abs(change) / previous) * 100;
+  return {
+    tone: change > 0 ? "up" : "down",
+    label: `${change > 0 ? "+" : "-"}${percent.toLocaleString(undefined, { maximumFractionDigits: 1 })}%`,
+    detail: `${count} ${window}`,
+  };
+}
+
+function shareOf(part: number, whole: number): string {
+  return whole > 0 ? `${Math.round((part / whole) * 100)}%` : "0%";
+}
+
+const DELTA_TONE = {
+  up: { className: "text-sint-green", Icon: TrendingUp },
+  down: { className: "text-sint-error-2", Icon: TrendingDown },
+  flat: { className: "text-gray-text-4", Icon: Minus },
+};
+
+function InstallsIcon() {
+  return (
+    <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+      <Smartphone className="h-4 w-4" />
+    </span>
+  );
+}
+
 function StatCard({
   title,
   value,
-  deltaLabel,
-  deltaPositive,
+  previous,
+  days,
+  subtitle,
+  icon = <MembersIconFilled />,
 }: {
   title: string;
-  value: string;
-  deltaLabel: string;
-  deltaPositive?: boolean;
+  value: number;
+  // Omit for counts with no history to compare against.
+  previous?: number;
+  days: number;
+  subtitle?: string;
+  icon?: React.ReactNode;
 }) {
+  const delta =
+    previous === undefined ? null : describeDelta(value, previous, days);
+  const tone = delta ? DELTA_TONE[delta.tone] : null;
   return (
     <div className="rounded-[15px] bg-white shadow-sm border border-gray-1 flex flex-col gap-4 p-4">
       <div className="flex items-center gap-[6px]">
-        <MembersIconFilled />
+        {icon}
         <span className="text-gray-text-4">{title}</span>
       </div>
-      <p className="text-3xl font-semibold tracking-tight">{value}</p>
-      <div className="flex items-center gap-2 text-sm">
-        <span
+      <p className="text-3xl font-semibold tracking-tight">
+        {value.toLocaleString()}
+      </p>
+      {delta && tone && (
+        <div className="flex items-center gap-2 text-sm">
+          <span
+            className={[
+              "inline-flex items-center gap-1 rounded-lg text-xs font-semibold",
+              tone.className,
+            ].join(" ")}
+          >
+            <tone.Icon className="h-3.5 w-3.5" />
+            {delta.label}
+          </span>
+          <span>{delta.detail}</span>
+        </div>
+      )}
+      {subtitle && <p className="text-sm text-gray-text-4">{subtitle}</p>}
+    </div>
+  );
+}
+
+function PeriodSelector({
+  days,
+  onChange,
+}: {
+  days: StatsDays;
+  onChange: (days: StatsDays) => void;
+}) {
+  return (
+    <div
+      role="group"
+      aria-label="Comparison period"
+      className="flex items-center gap-1 rounded-xl bg-gray-2 p-1 text-sm text-gray-text-4"
+    >
+      <CalendarDays className="mx-2 h-4 w-4" />
+      {STATS_DAYS_OPTIONS.map((option) => (
+        <button
+          key={option}
+          type="button"
+          aria-pressed={option === days}
+          onClick={() => onChange(option)}
           className={[
-            "inline-flex items-center gap-1 rounded-lg text-xs font-semibold",
-            deltaPositive
-              ? " text-sint-green "
-              : " text-sint-error-2",
+            "rounded-lg px-3 py-1.5",
+            option === days ? "bg-white font-semibold text-zinc-900 shadow-sm" : "",
           ].join(" ")}
         >
-          {deltaPositive ? (
-            <TrendingUp className="h-3.5 w-3.5" />
-          ) : (
-            <TrendingDown className="h-3.5 w-3.5" />
-          )}
-          {deltaLabel}
-        </span>
-        <span>from last month</span>
-      </div>
+          {option} days
+        </button>
+      ))}
     </div>
   );
 }
@@ -67,7 +156,7 @@ function SectionCard({
 }
 
 export default function DashboardPage() {
-  const { stats } = useStatsContext();
+  const { stats, deviceStats, days, setDays } = useStatsContext();
   const { user } = useAuthContext();
   return (
     <div className="flex flex-col gap-8 w-full">
@@ -92,48 +181,59 @@ export default function DashboardPage() {
       <div>
         <div className="flex items-center justify-between gap-3">
           <h2 className="text-2xl font-bold tracking-tight">Overview</h2>
-          {/* <div className="flex items-center gap-2">
-            <button
-              type="button"
-              className="inline-flex items-center gap-2 rounded-xl bg-white px-3 py-2 text-sm font-semibold text-zinc-700 shadow-sm ring-1 ring-zinc-200/70 hover:bg-zinc-50"
-            >
-              <CalendarDays className="h-4 w-4 text-zinc-500" />
-              Last month
-            </button>
-            <button
-              type="button"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white text-zinc-700 shadow-sm ring-1 ring-zinc-200/70 hover:bg-zinc-50"
-              aria-label="Filter"
-            >
-              <Filter className="h-4 w-4 text-zinc-500" />
-            </button>
-          </div> */}
+          <PeriodSelector days={days} onChange={setDays} />
         </div>
 
         <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <StatCard
             title="Total Users"
-            value={stats?.total_users?.toString() || "0"}
-            deltaLabel="+12%"
-            deltaPositive
+            value={stats.total_users}
+            previous={stats.previous.total_users}
+            days={days}
           />
           <StatCard
             title="Total Parishioners"
-            value={stats?.total_parishioners?.toString() || "0"}
-            deltaLabel="+3%"
-            deltaPositive
+            value={stats.total_parishioners}
+            previous={stats.previous.total_parishioners}
+            days={days}
           />
           <StatCard
             title="Total Priests"
-            value={stats?.total_priests?.toString() || "0"}
-            deltaLabel="+12%"
-            deltaPositive
+            value={stats.total_priests}
+            previous={stats.previous.total_priests}
+            days={days}
           />
           <StatCard
             title="Total Parish Admins"
-            value={stats?.total_parish_admins?.toString() || "0"}
-            deltaLabel="+12%"
-            deltaPositive
+            value={stats.total_parish_admins}
+            previous={stats.previous.total_parish_admins}
+            days={days}
+          />
+        </div>
+
+        <h3 className="mt-6 text-gray-text-4">Mobile App</h3>
+        <div className="mt-3 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <StatCard
+            title="Verified Installs"
+            value={deviceStats.verified_installs}
+            previous={deviceStats.previous_verified_installs}
+            days={days}
+            subtitle={`iOS ${deviceStats.by_platform.ios.toLocaleString()} · Android ${deviceStats.by_platform.android.toLocaleString()}`}
+            icon={<InstallsIcon />}
+          />
+          <StatCard
+            title="Active Installs"
+            value={deviceStats.active}
+            days={days}
+            subtitle={`${shareOf(deviceStats.active, deviceStats.verified_installs)} of verified installs · opened in the last ${days} days`}
+            icon={<InstallsIcon />}
+          />
+          <StatCard
+            title="Signed-in Installs"
+            value={deviceStats.signed_in}
+            days={days}
+            subtitle={`${shareOf(deviceStats.signed_in, deviceStats.verified_installs)} of verified installs`}
+            icon={<InstallsIcon />}
           />
         </div>
       </div>
